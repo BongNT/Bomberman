@@ -32,7 +32,7 @@ public class BombermanGame extends Application {
     private Canvas canvas;
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
-    private Actor bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+    private Actor bomberman = new Bomber(5, 5, Sprite.player_right.getFxImage());
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
