@@ -1,6 +1,7 @@
 package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.List;
@@ -73,9 +74,11 @@ public abstract class Actor extends Entity implements Movable{
         }
         for (int i = 0; i < map.size();i++) {
 
+            System.out.print(dir.toString());
             switch (dir) {
                 case UP:
-                    if (map.get(i).y - SCALED_SIZE >= y - speed) {
+                    if (!checkCollision(map.get(i),this )){
+                    //if (map.get(i).y - SCALED_SIZE >= y - speed) {
                         canMove = true;
                         return;
                     } else {
@@ -117,4 +120,6 @@ public abstract class Actor extends Entity implements Movable{
             }
         }
     }
+
+
 }
