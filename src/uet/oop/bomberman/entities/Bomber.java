@@ -12,7 +12,7 @@ public class Bomber extends Actor {
     public Bomber(int x, int y, Image img) {
         super( x, y, img);
         dir = DIR.DEFAULT;
-        speed = Sprite.SCALED_SIZE / 16;
+        speed = Sprite.SCALED_SIZE / 32;
     }
 
     @Override

@@ -30,6 +30,7 @@ public class BombermanGame extends Application {
 
     private GraphicsContext gc;
     private Canvas canvas;
+    public static char[][] map = null;
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
     private Actor bomberman = new Bomber(5, 5, Sprite.player_right.getFxImage());
@@ -121,12 +122,14 @@ public class BombermanGame extends Application {
             int level = sc.nextInt();
             HEIGHT = sc.nextInt();
             WIDTH = sc.nextInt();
+            map = new char[HEIGHT][WIDTH];
             sc.nextLine();
             for (int i = 0; i < HEIGHT; i++) {
                 String temp = sc.nextLine();
                 for (int j = 0; j < WIDTH; j++) {
                     Entity object;
                     char p = temp.charAt(j);
+                    map[i][j] = p;
                     switch (p) {
                         case '#':
                             object = new Wall(j, i, Sprite.wall.getFxImage());
@@ -152,7 +155,6 @@ public class BombermanGame extends Application {
                         object = new Grass(i, j, Sprite.grass.getFxImage());
                     }*/
                 }
-
             }
         } catch (IOException e) {
             e.printStackTrace();
