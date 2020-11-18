@@ -26,11 +26,11 @@ public abstract class Entity {
         this.y = yUnit * SCALED_SIZE;
         this.img = img;
     }
-    protected boolean checkCollision (Entity entity1, Entity entity2) {
-        /*  A(x,y)----B(a,y)
+    /*protected boolean checkCollision (Entity entity1, Entity entity2) {
+        *//*  A(x,y)----B(a,y)
 		       |	     |
 	        C(x,b)----D(a,b)
-	    */
+	    *//*
         if (entity1 instanceof Grass || entity2 instanceof Grass) {
             return false;
         }
@@ -41,7 +41,7 @@ public abstract class Entity {
         int y2 = entity2.y;
 
         return x1 + S > x2 && x2 + S > x1 && y1 + S > y2 && y2 + S > y1;
-    }
+    }*/
     protected boolean checkCollision (Rectangle a1, Rectangle a2) {
         return a1.intersects(a2);
     }

@@ -19,4 +19,28 @@ public class Bomber extends Actor {
     public void update() {
         move();
     }
+
+    @Override
+    public void moveRight() {
+        super.moveRight();
+        img = Sprite.player_right.getFxImage();
+    }
+
+    @Override
+    public void moveLeft() {
+        super.moveLeft();
+        img = Sprite.player_left.getFxImage();
+    }
+
+    @Override
+    public void moveUp() {
+        super.moveUp();
+        img = Sprite.player_up.getFxImage();
+    }
+
+    @Override
+    public void moveDown() {
+        super.moveDown();
+        img = Sprite.player_down.getFxImage();
+    }
 }
