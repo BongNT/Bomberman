@@ -7,12 +7,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class Bomber extends Actor {
+    private int maxBomb = 3;
+    private List<Bomb> bombs = new ArrayList<>();
 
-    public Bomber(int x, int y, Image img) {
-        super( x, y, img);
+    public Bomber(int xUnit, int yUnit, Image img) {
+        super(xUnit, yUnit, img);
         dir = DIR.DEFAULT;
         speed = SCALED_SIZE / 8;
     }
@@ -21,11 +26,18 @@ public class Bomber extends Actor {
     public void update() {
         move();
         updateImage();
+        for (int i = 0; i < bombs.size(); i++) {
+            Bomb bomb = bombs.get(i);
+            bomb.update();
+            if (bomb.exploded) {
+                bombs.remove(i);
+            }
+        }
     }
 
     @Override
     protected void updateImage() {
-        if (!canMove) return;
+
         switch (dir) {
             case UP:
                 img = animateImage(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2);
@@ -67,7 +79,23 @@ public class Bomber extends Actor {
         super.moveDown();
 
     }
-    public Bomb setBomb() {
-        return new Bomb(x/SCALED_SIZE, y/SCALED_SIZE, Sprite.bomb.getFxImage());
+
+    public void setBomb() {
+        if (bombs.size() >= maxBomb) return;
+        int xUnit = (x + SCALED_SIZE / 3) / SCALED_SIZE;
+        int yUnit = (y + SCALED_SIZE / 3) / SCALED_SIZE;
+        for (int i = 0; i < bombs.size(); i++) {
+            if (bombs.get(i).x == xUnit * SCALED_SIZE && bombs.get(i).y == yUnit * SCALED_SIZE) {
+                return;
+            }
+        }
+        bombs.add(new Bomb(xUnit, yUnit, Sprite.bomb.getFxImage()));
+
+    }
+
+    @Override
+    public void render(GraphicsContext gc) {
+        super.render(gc);
+        bombs.forEach(g -> g.render(gc));
     }
 }

@@ -30,7 +30,7 @@ public class BombermanGame extends Application {
     //map
     private List<Entity> stillObjects = new ArrayList<>();
     private Bomber bomberman = null;
-    private List<Bomb> bombs = new ArrayList<>();
+
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
@@ -67,8 +67,7 @@ public class BombermanGame extends Application {
                     bomberman.moveRight();
                     break;
                 case SPACE:
-                    System.out.println("bomb" + bombs.size());
-                    bombs.add(bomberman.setBomb());
+                    bomberman.setBomb();
                     break;
             }
         });
@@ -101,7 +100,7 @@ public class BombermanGame extends Application {
         };
         timer.start();
         //entities.add(new Bomb(32,32,Sprite.bomb.getFxImage()));
-        entities.add(bomberman);
+        //entities.add(bomberman);
     }
 
     public void createMap() {
@@ -146,21 +145,15 @@ public class BombermanGame extends Application {
 
     public void update() {
         bomberman.checkMove(stillObjects, entities);
-        entities.forEach(Entity::update);
-        for (int i = 0; i < bombs.size(); i++) {
-            Bomb bomb = bombs.get(i);
-            bomb.update();
-            if(bomb.exploded) {
-                bombs.remove(i);
-            }
-        }
+        bomberman.update();
+        //entities.forEach(Entity::update);
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
-        entities.forEach(g -> g.render(gc));
-        //bomberman.render(gc);
-        bombs.forEach(g -> g.render(gc));
+        //entities.forEach(g -> g.render(gc));
+        bomberman.render(gc);
+
     }
 }

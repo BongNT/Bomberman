@@ -38,4 +38,5 @@ public abstract class Entity {
     public Rectangle getRec() {
         return new Rectangle(x,y,SCALED_SIZE,SCALED_SIZE);
     }
+
 }
