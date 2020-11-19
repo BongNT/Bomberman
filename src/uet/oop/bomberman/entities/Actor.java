@@ -10,6 +10,9 @@ import static uet.oop.bomberman.BombermanGame.WIDTH;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public abstract class Actor extends Entity implements Movable{
+    //số lần thay đổi ảnh
+    protected int timeAnimate = 6;
+    protected int presentImg = 2;
     protected int speed;
     protected DIR dir;
     protected boolean canMove;
@@ -45,7 +48,6 @@ public abstract class Actor extends Entity implements Movable{
 
     protected void move(){
         if (!canMove) return;
-
         switch (dir) {
             case UP:
                 y -= speed;
@@ -133,5 +135,12 @@ public abstract class Actor extends Entity implements Movable{
         }
     }
 
+    protected Image animateImage(Sprite normal, Sprite x1, Sprite x2) {
+        //if(presentImg == timeAnimate) presentImg = 0;
+        presentImg %= timeAnimate;
+        return Sprite.movingSprite(normal, x1, x2, (presentImg++) ,timeAnimate).getFxImage();
+    }
+
+    abstract protected void updateImage();
 
 }
