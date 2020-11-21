@@ -14,7 +14,7 @@ import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class Bomber extends Actor {
     private int maxBomb = 3;
-    private List<Bomb> bombs = new ArrayList<>();
+    private List<Entity> bombs = new ArrayList<>();
 
     public Bomber(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
@@ -26,8 +26,9 @@ public class Bomber extends Actor {
     public void update() {
         move();
         updateImage();
+        //load bomb nổ
         for (int i = 0; i < bombs.size(); i++) {
-            Bomb bomb = bombs.get(i);
+            Bomb bomb =(Bomb) bombs.get(i);
             bomb.update();
             if (bomb.exploded) {
                 bombs.remove(i);
@@ -80,6 +81,7 @@ public class Bomber extends Actor {
 
     }
 
+
     public void setBomb() {
         if (bombs.size() >= maxBomb) return;
         int xUnit = (x + SCALED_SIZE / 3) / SCALED_SIZE;
@@ -91,6 +93,10 @@ public class Bomber extends Actor {
         }
         bombs.add(new Bomb(xUnit, yUnit, Sprite.bomb.getFxImage()));
 
+    }
+
+    public List<Entity> getBombs() {
+        return bombs;
     }
 
     @Override

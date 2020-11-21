@@ -144,7 +144,7 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
-        bomberman.checkMove(stillObjects, entities);
+        bomberman.checkMove(stillObjects, bomberman.getBombs());
         bomberman.update();
         //entities.forEach(Entity::update);
     }

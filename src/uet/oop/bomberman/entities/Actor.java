@@ -67,14 +67,14 @@ public abstract class Actor extends Entity implements Movable{
     }
 
     @Override
-    public void checkMove(List<Entity> map, List<Entity> entityList) {
+    public void checkMove(List<Entity> map, List<Entity> bombs) {
         if(dir == DIR.DEFAULT){
             canMove = false;
             return;
         }
         int pos = x / SCALED_SIZE + y/SCALED_SIZE * WIDTH;
         Rectangle actor = null;
-        //kiem tra va cham.
+        //kiem tra va cham vs map.
         switch (dir) {
             case UP:
                 actor = new Rectangle(x+2, y-speed, SCALED_SIZE-10,SCALED_SIZE);
@@ -86,8 +86,7 @@ public abstract class Actor extends Entity implements Movable{
                     canMove = false;
                     return;
                 }
-                canMove = true;
-                return;
+                break;
 
             case DOWN:
                 actor = new Rectangle(x+2, y+speed, SCALED_SIZE-10,SCALED_SIZE);
@@ -99,8 +98,7 @@ public abstract class Actor extends Entity implements Movable{
                     canMove = false;
                     return;
                 }
-                canMove = true;
-                return;
+                break;
 
             case LEFT:
                 actor = new Rectangle(x-speed, y+2, SCALED_SIZE-10,SCALED_SIZE-6);
@@ -112,8 +110,7 @@ public abstract class Actor extends Entity implements Movable{
                     canMove = false;
                     return;
                 }
-                canMove = true;
-                return;
+                break;
 
             case RIGHT:
                 actor = new Rectangle(x + speed, y+2, SCALED_SIZE-10,SCALED_SIZE-6);
@@ -125,14 +122,52 @@ public abstract class Actor extends Entity implements Movable{
                     canMove = false;
                     return;
                 }
-                canMove = true;
-                return;
+                break;
 
-            default: {
-                canMove = false;
-                return;
+        }
+        //kiem tra va cham vs bomb.
+        actor = new Rectangle(x , y, SCALED_SIZE ,SCALED_SIZE);
+        for (int i = 0; i < bombs.size(); i++) {
+            if(!checkCollision(actor, bombs.get(i).getRec())) {
+                Rectangle tempActor = null;
+                switch (dir) {
+                    case UP:
+                        tempActor = new Rectangle(x, y-speed, SCALED_SIZE,SCALED_SIZE);
+                        if(checkCollision(tempActor, bombs.get(i).getRec())) {
+                            canMove = false;
+                            return;
+                        }
+                        break;
+
+                    case DOWN:
+                        tempActor = new Rectangle(x, y+speed, SCALED_SIZE,SCALED_SIZE);
+                        if(checkCollision(tempActor, bombs.get(i).getRec())) {
+                            canMove = false;
+                            return;
+                        }
+                        break;
+
+                    case LEFT:
+                        tempActor = new Rectangle(x-speed, y, SCALED_SIZE,SCALED_SIZE);
+                        if(checkCollision(tempActor, bombs.get(i).getRec())) {
+                            canMove = false;
+                            return;
+                        }
+                        break;
+
+                    case RIGHT:
+                        tempActor = new Rectangle(x + speed, y, SCALED_SIZE,SCALED_SIZE);
+                        if(checkCollision(tempActor, bombs.get(i).getRec())) {
+                            canMove = false;
+                            return;
+                        }
+                        break;
+
+                }
             }
         }
+        canMove = true;
+
     }
 
     protected Image animateImage(Sprite normal, Sprite x1, Sprite x2) {
