@@ -26,9 +26,9 @@ public class BombermanGame extends Application {
     private GraphicsContext gc;
     private Canvas canvas;
 
-    private List<Entity> entities = new ArrayList<>();
+    //private List<Entity> entities = new ArrayList<>();
     //map
-    private List<Entity> stillObjects = new ArrayList<>();
+    public static List<Entity> map = new ArrayList<>();
     private Bomber bomberman = null;
 
     public static void main(String[] args) {
@@ -135,7 +135,7 @@ public class BombermanGame extends Application {
                             object = new Grass(j, i, Sprite.grass.getFxImage());
                             break;
                     }
-                    stillObjects.add(object);
+                    map.add(object);
                 }
             }
         } catch (IOException e) {
@@ -144,14 +144,14 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
-        bomberman.checkMove(stillObjects, bomberman.getBombs());
+        bomberman.checkMove(map, bomberman.getBombs());
         bomberman.update();
         //entities.forEach(Entity::update);
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        stillObjects.forEach(g -> g.render(gc));
+        map.forEach(g -> g.render(gc));
         //entities.forEach(g -> g.render(gc));
         bomberman.render(gc);
 

@@ -72,7 +72,7 @@ public abstract class Actor extends Entity implements Movable{
             canMove = false;
             return;
         }
-        int pos = x / SCALED_SIZE + y/SCALED_SIZE * WIDTH;
+        int pos = getPosition();
         Rectangle actor = null;
         //kiem tra va cham vs map.
         switch (dir) {

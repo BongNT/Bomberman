@@ -4,7 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
 
-import static uet.oop.bomberman.BombermanGame.FPS;
+import static uet.oop.bomberman.BombermanGame.*;
+import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class Bomb extends Entity{
     public boolean exploded;
@@ -21,10 +22,10 @@ public class Bomb extends Entity{
         super(x, y, img);
         exploded = false;
         isExploding = false;
-        flameUp = new Flame(x, y - 1, Sprite.explosion_vertical_top_last.getFxImage(), 2, DIR.UP);
-        flameDown = new Flame(x, y + 1, Sprite.explosion_vertical_down_last.getFxImage(), 2, DIR.DOWN);
-        flameLeft = new Flame(x - 1, y  , Sprite.explosion_horizontal_left_last.getFxImage(), 2, DIR.LEFT);
-        flameRight = new Flame(x + 1, y , Sprite.explosion_horizontal_right_last.getFxImage(), 2, DIR.RIGHT);
+        flameUp = new Flame(x, y - 1, Sprite.explosion_vertical_top_last.getFxImage(), setLengthFlame(DIR.UP), DIR.UP);
+        flameDown = new Flame(x, y + 1, Sprite.explosion_vertical_down_last.getFxImage(), setLengthFlame(DIR.DOWN), DIR.DOWN);
+        flameLeft = new Flame(x - 1, y  , Sprite.explosion_horizontal_left_last.getFxImage(), setLengthFlame(DIR.LEFT), DIR.LEFT);
+        flameRight = new Flame(x + 1, y , Sprite.explosion_horizontal_right_last.getFxImage(), setLengthFlame(DIR.RIGHT), DIR.RIGHT);
     }
 
     public void increaseLength() {
@@ -67,4 +68,47 @@ public class Bomb extends Entity{
         }
     }
 
+    private int setLengthFlame(DIR dir){
+        int pos = getPosition();
+        int length = 0;
+        switch (dir) {
+            case UP:
+                for(int i = 1; i <= presentFlameLength; i++) {
+                    if(! (map.get(pos - i * WIDTH) instanceof Grass)) {
+                        break;
+                    }
+                    length++;
+                }
+                break;
+            case DOWN:
+                for(int i = 1; i <= presentFlameLength; i++) {
+                    if(! (map.get(pos + i * WIDTH) instanceof Grass)) {
+                        break;
+                    }
+                    length++;
+                }
+                break;
+            case LEFT:
+                for(int i = 1; i <= presentFlameLength; i++) {
+                    if(! (map.get(pos - i) instanceof Grass)) {
+                        break;
+                    }
+                    length++;
+                }
+                break;
+            case RIGHT:
+                for(int i = 1; i <= presentFlameLength; i++) {
+                    if(! (map.get(pos + i ) instanceof Grass)) {
+                        break;
+                    }
+                    length++;
+                }
+                break;
+        }
+        return length;
+    }
+
+    private void destroyObject() {
+
+    }
 }

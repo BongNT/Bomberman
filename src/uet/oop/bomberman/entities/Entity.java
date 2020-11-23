@@ -9,6 +9,7 @@ import uet.oop.bomberman.graphics.Sprite;
 
 import java.awt.*;
 
+import static uet.oop.bomberman.BombermanGame.WIDTH;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public abstract class Entity {
@@ -38,5 +39,7 @@ public abstract class Entity {
     public Rectangle getRec() {
         return new Rectangle(x,y,SCALED_SIZE,SCALED_SIZE);
     }
-
+    public int getPosition() {
+        return x / SCALED_SIZE + y/SCALED_SIZE * WIDTH;
+    }
 }
