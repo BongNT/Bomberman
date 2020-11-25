@@ -13,19 +13,24 @@ public class Bomb extends Entity{
     private int timeExsist = FPS * 3;
     private int timeExplode = FPS;
     //độ dài max hiện tại nếu không vướng tường
-    public static int presentFlameLength = 2;
-    private final Flame flameUp ;
+    public static int presentFlameLength = 3;
+    private final Flame flameUp;
     private final Flame flameDown;
     private final Flame flameLeft;
     private final Flame flameRight;
+    private int upLength = setLengthFlame(DIR.UP);
+    private int downLength = setLengthFlame(DIR.DOWN);
+    private int leftLength = setLengthFlame(DIR.LEFT);
+    private int rightLength = setLengthFlame(DIR.RIGHT);
+
     public Bomb(int x, int y, Image img) {
         super(x, y, img);
         exploded = false;
         isExploding = false;
-        flameUp = new Flame(x, y - 1, Sprite.explosion_vertical_top_last.getFxImage(), setLengthFlame(DIR.UP), DIR.UP);
-        flameDown = new Flame(x, y + 1, Sprite.explosion_vertical_down_last.getFxImage(), setLengthFlame(DIR.DOWN), DIR.DOWN);
-        flameLeft = new Flame(x - 1, y  , Sprite.explosion_horizontal_left_last.getFxImage(), setLengthFlame(DIR.LEFT), DIR.LEFT);
-        flameRight = new Flame(x + 1, y , Sprite.explosion_horizontal_right_last.getFxImage(), setLengthFlame(DIR.RIGHT), DIR.RIGHT);
+        flameUp = new Flame(x, y - 1, Sprite.explosion_vertical_top_last.getFxImage(), upLength, DIR.UP);
+        flameDown = new Flame(x, y + 1, Sprite.explosion_vertical_down_last.getFxImage(), downLength, DIR.DOWN);
+        flameLeft = new Flame(x - 1, y, Sprite.explosion_horizontal_left_last.getFxImage(), leftLength, DIR.LEFT);
+        flameRight = new Flame(x + 1, y, Sprite.explosion_horizontal_right_last.getFxImage(), rightLength, DIR.RIGHT);
     }
 
     public void increaseLength() {
@@ -46,10 +51,12 @@ public class Bomb extends Entity{
         if (isExploding) {
             img = Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1,
                     Sprite.bomb_exploded2, timeExplode--, FPS).getFxImage();
+            destroyObject();
             flameUp.update();
             flameDown.update();
             flameLeft.update();
             flameRight.update();
+
         }
         //sau khi nổ
         if (timeExplode == 0) {
@@ -109,6 +116,30 @@ public class Bomb extends Entity{
     }
 
     private void destroyObject() {
+        int pos = getPosition();
+        if (upLength < presentFlameLength) {
+            upLength++;
+        }
+        for (int i = 1; i <= upLength; i++) {
+            int j = pos - i * WIDTH;
+            if (j < 0 || j > map.size()) {
+                break;
+            }
+            Entity temp = map.get(j);
+            if (temp instanceof Wall) {
+                break;
+            }
+            if (temp instanceof Brick) {
+                ((Brick) temp).destroy(j);
 
+                if (((Brick) temp).isDestroyed) {
+                    map.remove(j);
+                    System.out.println(3);
+                    Entity obj = new Grass(x, y, Sprite.grass.getFxImage());
+                    map.add(j, obj);
+                }
+                break;
+            }
+        }
     }
 }

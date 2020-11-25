@@ -26,7 +26,7 @@ public class BombermanGame extends Application {
     private GraphicsContext gc;
     private Canvas canvas;
 
-    //private List<Entity> entities = new ArrayList<>();
+    public static List<Entity> enemies = new ArrayList<>();
     //map
     public static List<Entity> map = new ArrayList<>();
     private Bomber bomberman = null;
@@ -85,8 +85,9 @@ public class BombermanGame extends Application {
             public void handle(long t) {
                 long start = System.currentTimeMillis();
                 //cac ham cap nhat.
-                render();
                 update();
+                render();
+
 
                 long realTime = System.currentTimeMillis() - start;
                 if(realTime < timeEachFrame) {
@@ -146,6 +147,10 @@ public class BombermanGame extends Application {
     public void update() {
         bomberman.checkMove(map, bomberman.getBombs());
         bomberman.update();
+        map.forEach(Entity::update);
+//        for(Entity entity : map){
+//            entity.update();
+//        }
         //entities.forEach(Entity::update);
     }
 
