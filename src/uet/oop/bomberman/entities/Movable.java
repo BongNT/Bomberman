@@ -8,8 +8,5 @@ public interface Movable {
     void moveLeft();
     void moveRight();
     void notMoving();
-    void checkMove(List<Entity> map, List<Entity> entityList);
-    enum DIR{
-        DEFAULT,UP,DOWN,LEFT,RIGHT,
-    }
+    void checkMove(List<Entity> entityList);
 }

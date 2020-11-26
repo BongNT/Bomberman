@@ -1,14 +1,19 @@
 package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
-import uet.oop.bomberman.graphics.Sprite;
 
+import uet.oop.bomberman.graphics.Sprite;
+import static uet.oop.bomberman.BombermanGame.*;
+import java.awt.*;
 import java.util.List;
 
+import static uet.oop.bomberman.BombermanGame.WIDTH;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public abstract class Actor extends Entity implements Movable{
+    //số lần thay đổi ảnh
+    protected int timeAnimate = 6;
+    protected int presentImg = 2;
     protected int speed;
     protected DIR dir;
     protected boolean canMove;
@@ -25,19 +30,16 @@ public abstract class Actor extends Entity implements Movable{
     @Override
     public void moveDown() {
         dir = DIR.DOWN;
-
     }
 
     @Override
     public void moveLeft() {
         dir = DIR.LEFT;
-
     }
 
     @Override
     public void moveRight() {
         dir = DIR.RIGHT;
-
     }
 
     @Override
@@ -47,7 +49,6 @@ public abstract class Actor extends Entity implements Movable{
 
     protected void move(){
         if (!canMove) return;
-
         switch (dir) {
             case UP:
                 y -= speed;
@@ -67,59 +68,115 @@ public abstract class Actor extends Entity implements Movable{
     }
 
     @Override
-    public void checkMove(List<Entity> map, List<Entity> entityList) {
+    public void checkMove(List<Entity> bombs) {
         if(dir == DIR.DEFAULT){
             canMove = false;
             return;
         }
-        for (int i = 0; i < map.size();i++) {
-
-            System.out.print(dir.toString());
-            switch (dir) {
-                case UP:
-                    if (!checkCollision(map.get(i),this )){
-                    //if (map.get(i).y - SCALED_SIZE >= y - speed) {
-                        canMove = true;
-                        return;
-                    } else {
-                        canMove = false;
-                        return;
-                    }
-
-                case DOWN:
-                    if (map.get(i).y <= y + speed) {
-                        canMove = true;
-                        return;
-                    } else {
-                        canMove = false;
-                        return;
-                    }
-
-                case LEFT:
-                    if (map.get(i).x + SCALED_SIZE <= x - speed) {
-                        canMove = true;
-                        return;
-                    } else {
-                        canMove = false;
-                        return;
-                    }
-
-                case RIGHT:
-                    if (map.get(i).x >= x + speed) {
-                        canMove = true;
-                        return;
-                    } else {
-                        canMove = false;
-                        return;
-                    }
-
-                default: {
+        int pos = getPosition();
+        Rectangle actor = null;
+        //kiem tra va cham vs map.
+        switch (dir) {
+            case UP:
+                actor = new Rectangle(x+2, y-speed, SCALED_SIZE-10,SCALED_SIZE);
+                if(!(map.get(pos - WIDTH) instanceof Grass) && checkCollision(actor, map.get(pos - WIDTH).getRec())) {
                     canMove = false;
                     return;
                 }
+                if(!(map.get(pos - WIDTH + 1) instanceof Grass) && checkCollision(actor, map.get(pos - WIDTH + 1).getRec())) {
+                    canMove = false;
+                    return;
+                }
+                break;
+
+            case DOWN:
+                actor = new Rectangle(x+2, y+speed, SCALED_SIZE-10,SCALED_SIZE);
+                if(!(map.get(pos + WIDTH) instanceof Grass) && checkCollision(actor, map.get(pos + WIDTH).getRec())) {
+                    canMove = false;
+                    return;
+                }
+                if(!(map.get(pos + WIDTH + 1) instanceof Grass) && checkCollision(actor, map.get(pos + WIDTH + 1).getRec())) {
+                    canMove = false;
+                    return;
+                }
+                break;
+
+            case LEFT:
+                actor = new Rectangle(x-speed, y+2, SCALED_SIZE-10,SCALED_SIZE-6);
+                if(!(map.get(pos - 1) instanceof Grass) && checkCollision(actor, map.get(pos  - 1).getRec())) {
+                    canMove = false;
+                    return;
+                }
+                if(!(map.get(pos + WIDTH - 1) instanceof Grass) && checkCollision(actor, map.get(pos + WIDTH - 1).getRec())) {
+                    canMove = false;
+                    return;
+                }
+                break;
+
+            case RIGHT:
+                actor = new Rectangle(x + speed, y+2, SCALED_SIZE-10,SCALED_SIZE-6);
+                if(!(map.get(pos + 1) instanceof Grass) && checkCollision(actor, map.get(pos + 1).getRec())) {
+                    canMove = false;
+                    return;
+                }
+                if(!(map.get(pos + WIDTH + 1) instanceof Grass) && checkCollision(actor, map.get(pos + WIDTH + 1).getRec())) {
+                    canMove = false;
+                    return;
+                }
+                break;
+
+        }
+        //kiem tra va cham vs bomb.
+        actor = new Rectangle(x , y, SCALED_SIZE ,SCALED_SIZE);
+        for (int i = 0; i < bombs.size(); i++) {
+            if(!checkCollision(actor, bombs.get(i).getRec())) {
+                Rectangle tempActor = null;
+                switch (dir) {
+                    case UP:
+                        tempActor = new Rectangle(x, y-speed, SCALED_SIZE,SCALED_SIZE);
+                        if(checkCollision(tempActor, bombs.get(i).getRec())) {
+                            canMove = false;
+                            return;
+                        }
+                        break;
+
+                    case DOWN:
+                        tempActor = new Rectangle(x, y+speed, SCALED_SIZE,SCALED_SIZE);
+                        if(checkCollision(tempActor, bombs.get(i).getRec())) {
+                            canMove = false;
+                            return;
+                        }
+                        break;
+
+                    case LEFT:
+                        tempActor = new Rectangle(x-speed, y, SCALED_SIZE,SCALED_SIZE);
+                        if(checkCollision(tempActor, bombs.get(i).getRec())) {
+                            canMove = false;
+                            return;
+                        }
+                        break;
+
+                    case RIGHT:
+                        tempActor = new Rectangle(x + speed, y, SCALED_SIZE,SCALED_SIZE);
+                        if(checkCollision(tempActor, bombs.get(i).getRec())) {
+                            canMove = false;
+                            return;
+                        }
+                        break;
+
+                }
             }
         }
+        canMove = true;
+
     }
 
+    protected Image animateImage(Sprite normal, Sprite x1, Sprite x2) {
+        //if(presentImg == timeAnimate) presentImg = 0;
+        presentImg %= timeAnimate;
+        return Sprite.movingSprite(normal, x1, x2, (presentImg++) ,timeAnimate).getFxImage();
+    }
+
+    abstract protected void updateImage();
 
 }
