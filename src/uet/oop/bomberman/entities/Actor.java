@@ -75,15 +75,18 @@ public abstract class Actor extends Entity implements Movable{
         }
         int pos = getPosition();
         Rectangle actor = null;
+        Entity temp1 = null, temp2 = null;
         //kiem tra va cham vs map.
         switch (dir) {
             case UP:
                 actor = new Rectangle(x+2, y-speed, SCALED_SIZE-10,SCALED_SIZE);
-                if(!(map.get(pos - WIDTH) instanceof Grass) && checkCollision(actor, map.get(pos - WIDTH).getRec())) {
+                temp1 = map.get(pos - WIDTH);
+                temp2 = map.get(pos - WIDTH + 1);
+                if(!(temp1 instanceof Grass) && checkCollision(actor, temp1.getRec())) {
                     canMove = false;
                     return;
                 }
-                if(!(map.get(pos - WIDTH + 1) instanceof Grass) && checkCollision(actor, map.get(pos - WIDTH + 1).getRec())) {
+                if(!(temp2 instanceof Grass) && checkCollision(actor, temp2.getRec())) {
                     canMove = false;
                     return;
                 }
@@ -91,11 +94,13 @@ public abstract class Actor extends Entity implements Movable{
 
             case DOWN:
                 actor = new Rectangle(x+2, y+speed, SCALED_SIZE-10,SCALED_SIZE);
-                if(!(map.get(pos + WIDTH) instanceof Grass) && checkCollision(actor, map.get(pos + WIDTH).getRec())) {
+                temp1 = map.get(pos + WIDTH);
+                temp2 = map.get(pos + WIDTH + 1);
+                if(!(temp1 instanceof Grass) && checkCollision(actor, temp2.getRec())) {
                     canMove = false;
                     return;
                 }
-                if(!(map.get(pos + WIDTH + 1) instanceof Grass) && checkCollision(actor, map.get(pos + WIDTH + 1).getRec())) {
+                if(!(temp2 instanceof Grass) && checkCollision(actor, temp2.getRec())) {
                     canMove = false;
                     return;
                 }
@@ -103,11 +108,13 @@ public abstract class Actor extends Entity implements Movable{
 
             case LEFT:
                 actor = new Rectangle(x-speed, y+2, SCALED_SIZE-10,SCALED_SIZE-6);
-                if(!(map.get(pos - 1) instanceof Grass) && checkCollision(actor, map.get(pos  - 1).getRec())) {
+                temp1 = map.get(pos - 1);
+                temp2 = map.get(pos + WIDTH - 1);
+                if(!(temp1 instanceof Grass) && checkCollision(actor, temp1.getRec())) {
                     canMove = false;
                     return;
                 }
-                if(!(map.get(pos + WIDTH - 1) instanceof Grass) && checkCollision(actor, map.get(pos + WIDTH - 1).getRec())) {
+                if(!(temp2 instanceof Grass) && checkCollision(actor, temp2.getRec())) {
                     canMove = false;
                     return;
                 }
@@ -115,11 +122,13 @@ public abstract class Actor extends Entity implements Movable{
 
             case RIGHT:
                 actor = new Rectangle(x + speed, y+2, SCALED_SIZE-10,SCALED_SIZE-6);
-                if(!(map.get(pos + 1) instanceof Grass) && checkCollision(actor, map.get(pos + 1).getRec())) {
+                temp1 = map.get(pos + 1);
+                temp2 = map.get(pos + WIDTH + 1);
+                if(!(temp1 instanceof Grass) && checkCollision(actor, temp1.getRec())) {
                     canMove = false;
                     return;
                 }
-                if(!(map.get(pos + WIDTH + 1) instanceof Grass) && checkCollision(actor, map.get(pos + WIDTH + 1).getRec())) {
+                if(!(temp2 instanceof Grass) && checkCollision(actor, temp2.getRec())) {
                     canMove = false;
                     return;
                 }

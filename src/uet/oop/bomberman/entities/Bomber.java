@@ -13,8 +13,8 @@ import java.util.List;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class Bomber extends Actor {
-    private int maxBomb = 3;
-    private List<Entity> bombs = new ArrayList<>();
+    private final int maxBomb = 3;
+    private final List<Entity> bombs = new ArrayList<>();
 
     public Bomber(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
@@ -36,6 +36,10 @@ public class Bomber extends Actor {
             for(int j = i; j < bombs.size(); j++) {
                 Bomb bomb2 =(Bomb) bombs.get(j);
                 collisionBomb(bomb, bomb2);
+            }
+            if (bomb.isExploding && bomb.collisionWithActor(this)) {
+                System.out.println("bomber : die");
+
             }
         }
     }

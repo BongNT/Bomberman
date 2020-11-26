@@ -4,20 +4,23 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.awt.*;
+
 import static uet.oop.bomberman.BombermanGame.*;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class Bomb extends Entity{
     public boolean exploded;
-    private boolean isExploding;
+    public boolean isExploding;
     private int timeExsist = FPS * 3;
     private int timeExplode = FPS;
     //độ dài max hiện tại nếu không vướng tường
-    public static int presentFlameLength = 3;
+    public int presentFlameLength = 3;
     private final Flame flameUp;
     private final Flame flameDown;
     private final Flame flameLeft;
     private final Flame flameRight;
+    //độ dài thực tế
     private int upLength = setLengthFlame(DIR.UP);
     private int downLength = setLengthFlame(DIR.DOWN);
     private int leftLength = setLengthFlame(DIR.LEFT);
@@ -70,10 +73,10 @@ public class Bomb extends Entity{
     public void render(GraphicsContext gc) {
         super.render(gc);
         if (isExploding) {
-            flameUp.render(gc);
-            flameDown.render(gc);
-            flameLeft.render(gc);
-            flameRight.render(gc);
+            flameUp.render(gc, presentFlameLength);
+            flameDown.render(gc, presentFlameLength);
+            flameLeft.render(gc, presentFlameLength);
+            flameRight.render(gc, presentFlameLength);
         }
     }
 
@@ -156,6 +159,12 @@ public class Bomb extends Entity{
             }
         }
         //kiểm tra vs vị trí qua bomb(vs người và enemies)
+
+    }
+
+    public boolean collisionWithActor(Actor actor) {
+        Rectangle a = actor.getRec();
+        return checkCollision(a, getVerticalRec()) || checkCollision(a, getHorizontalRec());
     }
 
     /**

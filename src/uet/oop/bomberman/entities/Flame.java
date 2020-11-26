@@ -19,7 +19,7 @@ public class Flame extends Entity {
     private int timeExplode = FPS;
     //các hình ảnh ở giữa
     private Image bodyImg;
-    private DIR dir;
+    private final DIR dir;
 
     public Flame(int xUnit, int yUnit, Image img, int length, DIR dir) {
         super(xUnit, yUnit, img);
@@ -83,8 +83,8 @@ public class Flame extends Entity {
         }
     }
 
-    @Override
-    public void render(GraphicsContext gc) {
+
+    public void render(GraphicsContext gc ,int presentFlameLength) {
         /*for (Image image : images) {
             gc.drawImage(image, x, y);
         }*/
@@ -96,25 +96,25 @@ public class Flame extends Entity {
                     for (int i = 0; i < length - 1; i++) {
                         gc.drawImage(bodyImg, x,y - SCALED_SIZE * i);
                     }
-                    if(length <= Bomb.presentFlameLength)gc.drawImage(img, x , y - SCALED_SIZE * (length-1));
+                    if(length <= presentFlameLength) gc.drawImage(img, x , y - SCALED_SIZE * (length-1));
                     break;
                 case DOWN:
                     for (int i = 0; i < length - 1; i++) {
                         gc.drawImage(bodyImg, x,y + SCALED_SIZE * i);
                     }
-                    if(length <= Bomb.presentFlameLength)gc.drawImage(img, x , y + SCALED_SIZE * (length-1));
+                    if(length <= presentFlameLength) gc.drawImage(img, x , y + SCALED_SIZE * (length-1));
                     break;
                 case LEFT:
                     for (int i = 0; i < length - 1; i++) {
                         gc.drawImage(bodyImg, x- SCALED_SIZE * i, y );
                     }
-                    if(length <= Bomb.presentFlameLength)gc.drawImage(img, x - SCALED_SIZE * (length-1) , y );
+                    if(length <= presentFlameLength) gc.drawImage(img, x - SCALED_SIZE * (length-1) , y );
                     break;
                 case RIGHT:
                     for (int i = 0; i < length - 1; i++) {
                         gc.drawImage(bodyImg, x + SCALED_SIZE * i, y );
                     }
-                    if(length <= Bomb.presentFlameLength) gc.drawImage(img, x + SCALED_SIZE * (length-1) , y );
+                    if(length <= presentFlameLength) gc.drawImage(img, x + SCALED_SIZE * (length-1) , y );
                     break;
                 default:
                     break;
