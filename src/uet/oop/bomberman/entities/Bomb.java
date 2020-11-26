@@ -56,13 +56,15 @@ public class Bomb extends Entity{
             flameDown.update();
             flameLeft.update();
             flameRight.update();
-
         }
+
         //sau khi nổ
         if (timeExplode == 0) {
             exploded = true;
         }
     }
+
+
 
     @Override
     public void render(GraphicsContext gc) {
@@ -122,24 +124,98 @@ public class Bomb extends Entity{
         }
         for (int i = 1; i <= upLength; i++) {
             int j = pos - i * WIDTH;
-            if (j < 0 || j > map.size()) {
-                break;
-            }
-            Entity temp = map.get(j);
-            if (temp instanceof Wall) {
-                break;
-            }
-            if (temp instanceof Brick) {
-                ((Brick) temp).destroy(j);
-
-                if (((Brick) temp).isDestroyed) {
-                    map.remove(j);
-                    System.out.println(3);
-                    Entity obj = new Grass(x, y, Sprite.grass.getFxImage());
-                    map.add(j, obj);
-                }
-                break;
+            if(collisionWithMap(j)){
+                upLength = i;
             }
         }
+        if (downLength < presentFlameLength) {
+            downLength++;
+        }
+        for (int i = 1; i <= downLength; i++) {
+            int j = pos + i * WIDTH;
+            if(collisionWithMap(j)){
+                downLength = i;
+            }
+        }
+        if (leftLength < presentFlameLength) {
+            leftLength++;
+        }
+        for (int i = 1; i <= leftLength; i++) {
+            int j = pos - i;
+            if(collisionWithMap(j)){
+                leftLength = i;
+            }
+        }
+        if (rightLength < presentFlameLength) {
+            rightLength++;
+        }
+        for (int i = 1; i <= rightLength; i++) {
+            int j = pos + i;
+            if(collisionWithMap(j)){
+                rightLength = i;
+            }
+        }
+        //kiểm tra vs vị trí qua bomb(vs người và enemies)
+    }
+
+    /**
+     * check collision between flame and map.
+     * @param pos position of entity in map
+     * @return return true if flame impact wall, brick.
+     */
+    private boolean collisionWithMap(int pos){
+        if (pos < 0 || pos > map.size()) {
+            return true;
+        }
+        Entity temp = map.get(pos);
+        if (temp instanceof Wall) {
+            return true;
+        }
+        if (temp instanceof Brick) {
+            ((Brick) temp).destroy();
+            return true;
+        }
+        return  false;
+    }
+    private void setTime(int timeExplode) {
+        timeExsist = 0;
+        this.timeExplode = timeExplode;
+    }
+
+    public int getTimeExplode() {
+        return timeExplode;
+    }
+
+    private int getVerticalLength() {
+        return downLength + upLength;
+    }
+    private int getHorizontalLength() {
+        return leftLength + rightLength;
+    }
+    private java.awt.Rectangle getHorizontalRec() {
+        return new java.awt.Rectangle(x - leftLength * SCALED_SIZE,y,getHorizontalLength() * SCALED_SIZE, SCALED_SIZE);
+    }
+    private java.awt.Rectangle getVerticalRec() {
+        return new java.awt.Rectangle(x , y - upLength * SCALED_SIZE, SCALED_SIZE, getVerticalLength() * SCALED_SIZE);
+    }
+
+
+    public void collisionWithBomb(Bomb bomb) {
+        if(checkCollision(getRec(), bomb.getHorizontalRec()) ||
+                checkCollision(getRec(), bomb.getVerticalRec()) ||
+                checkCollision(getVerticalRec(), bomb.getRec()) ||
+                checkCollision(getHorizontalRec(), bomb.getRec()))
+        {
+            if((this.isExploding &&!bomb.isExploding) || (!this.isExploding && bomb.isExploding)) {
+                int min = Integer.min(bomb.getTimeExplode(),timeExplode);
+                setTime(min);
+                isExploding =true;
+                bomb.setTime(min);
+                bomb.isExploding = true;
+
+            }
+        }
+
     }
 }
+

@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
+
 public class BombermanGame extends Application {
 
     public static int WIDTH ;
@@ -40,7 +42,7 @@ public class BombermanGame extends Application {
         createMap();
         // Tao Canvas
 
-        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
+        canvas = new Canvas(SCALED_SIZE * WIDTH, SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
         // Tao root container
@@ -79,15 +81,12 @@ public class BombermanGame extends Application {
         stage.show();
 
         AnimationTimer timer = new AnimationTimer() {
-
-
             @Override
             public void handle(long t) {
                 long start = System.currentTimeMillis();
                 //cac ham cap nhat.
                 update();
                 render();
-
 
                 long realTime = System.currentTimeMillis() - start;
                 if(realTime < timeEachFrame) {
@@ -100,8 +99,6 @@ public class BombermanGame extends Application {
             }
         };
         timer.start();
-        //entities.add(new Bomb(32,32,Sprite.bomb.getFxImage()));
-        //entities.add(bomberman);
     }
 
     public void createMap() {
@@ -145,9 +142,10 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
-        bomberman.checkMove(map, bomberman.getBombs());
+        bomberman.checkMove( bomberman.getBombs());
         bomberman.update();
         map.forEach(Entity::update);
+        updateMap();
 //        for(Entity entity : map){
 //            entity.update();
 //        }
@@ -160,5 +158,16 @@ public class BombermanGame extends Application {
         //entities.forEach(g -> g.render(gc));
         bomberman.render(gc);
 
+    }
+    private void updateMap() {
+        int n= map.size();
+        for(int j = 0;j <n;j++) {
+            Entity entity = map.get(j);
+            if (entity instanceof Brick && ((Brick) entity).isDestroyed) {
+                Entity obj = new Grass(entity.getX()/SCALED_SIZE,entity.getY()/SCALED_SIZE, Sprite.grass.getFxImage());
+                map.remove(j);
+                map.add(j, obj);
+            }
+        }
     }
 }

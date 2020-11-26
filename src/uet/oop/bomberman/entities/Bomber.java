@@ -33,6 +33,10 @@ public class Bomber extends Actor {
             if (bomb.exploded) {
                 bombs.remove(i);
             }
+            for(int j = i; j < bombs.size(); j++) {
+                Bomb bomb2 =(Bomb) bombs.get(j);
+                collisionBomb(bomb, bomb2);
+            }
         }
     }
 
@@ -103,5 +107,8 @@ public class Bomber extends Actor {
     public void render(GraphicsContext gc) {
         super.render(gc);
         bombs.forEach(g -> g.render(gc));
+    }
+    private void collisionBomb(Bomb bomb1, Bomb bomb2) {
+        bomb1.collisionWithBomb(bomb2);
     }
 }

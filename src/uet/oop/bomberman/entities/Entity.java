@@ -45,4 +45,12 @@ public abstract class Entity {
     public int getPosition() {
         return x / SCALED_SIZE + y/SCALED_SIZE * WIDTH;
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }

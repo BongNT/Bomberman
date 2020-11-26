@@ -8,5 +8,5 @@ public interface Movable {
     void moveLeft();
     void moveRight();
     void notMoving();
-    void checkMove(List<Entity> map, List<Entity> entityList);
+    void checkMove(List<Entity> entityList);
 }

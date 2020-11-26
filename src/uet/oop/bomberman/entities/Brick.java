@@ -5,14 +5,14 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
 
 import static uet.oop.bomberman.BombermanGame.FPS;
-import static uet.oop.bomberman.BombermanGame.map;
+
 
 public class Brick extends Entity {
     public boolean isDestroyed = false;
     private boolean isDestroying = false;
     private int timeDestroy = FPS;
-    private Image imgBackGround = Sprite.grass.getFxImage();
-    private int pos = 0;
+    private final Image imgBackGround = Sprite.grass.getFxImage();
+
 
     public Brick(int x, int y, Image img) {
         super(x, y, img);
@@ -31,10 +31,6 @@ public class Brick extends Entity {
             isDestroying = false;
             timeDestroy--;
         }
-        if (isDestroyed) {
-            System.out.println(1);
-            img = null;
-        }
 
     }
 
@@ -44,8 +40,7 @@ public class Brick extends Entity {
         super.render(gc);
     }
 
-    public void destroy(int pos) {
+    public void destroy() {
         isDestroying = true;
-        this.pos = pos;
     }
 }
