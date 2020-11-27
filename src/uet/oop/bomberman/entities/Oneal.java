@@ -2,12 +2,15 @@ package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
 
-import java.util.Iterator;
+public class Oneal extends Actor {
 
-public class Grass extends Entity {
-
-    public Grass(int x, int y, Image img) {
+    public Oneal(int x, int y, Image img) {
         super(x, y, img);
+    }
+
+    @Override
+    protected void updateImage() {
+
     }
 
     @Override

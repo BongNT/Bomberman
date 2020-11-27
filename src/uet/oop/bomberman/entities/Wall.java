@@ -4,8 +4,8 @@ import javafx.scene.image.Image;
 
 public class Wall extends Entity {
 
-    public Wall(int x, int y, Image img) {
-        super(x, y, img);
+    public Wall(int xUnit, int yUnit, Image img) {
+        super(xUnit, yUnit, img);
     }
 
     @Override

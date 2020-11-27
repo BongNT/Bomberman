@@ -20,8 +20,8 @@ import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class BombermanGame extends Application {
 
-    public static int WIDTH ;
-    public static int HEIGHT ;
+    public static int WIDTH;
+    public static int HEIGHT;
     public static final int FPS = 20;
     public static final int timeEachFrame = 1000 / FPS;
 
@@ -29,9 +29,9 @@ public class BombermanGame extends Application {
     private Canvas canvas;
 
     public static List<Entity> enemies = new ArrayList<>();
-    //map
     public static List<Entity> map = new ArrayList<>();
-    private Bomber bomberman = null;
+    public static List<Item> items = new ArrayList<>();
+    public static Bomber bomberman = null;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -109,10 +109,12 @@ public class BombermanGame extends Application {
             WIDTH = sc.nextInt();
 
             sc.nextLine();
+            //load map
             for (int i = 0; i < HEIGHT; i++) {
                 String temp = sc.nextLine();
                 for (int j = 0; j < WIDTH; j++) {
                     Entity object = null;
+                    Entity enemy = null;
                     char p = temp.charAt(j);
 
                     switch (p) {
@@ -126,15 +128,48 @@ public class BombermanGame extends Application {
                             bomberman = new Bomber(j, i, Sprite.player_right.getFxImage());
                             object = new Grass(j, i, Sprite.grass.getFxImage());
                             break;
-                        /*case '*':
-                            object = new Wall(i, j, Sprite.wall.getFxImage());
-                            break;*/
+                        case '1':
+                            enemy = new Balloom(j, i, Sprite.balloom_left1.getFxImage());
+                            object = new Grass(j, i, Sprite.grass.getFxImage());
+                            break;
+                        case '2':
+                            enemy = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
+                            object = new Grass(j, i, Sprite.grass.getFxImage());
+                            break;
                         default:
                             object = new Grass(j, i, Sprite.grass.getFxImage());
                             break;
                     }
+                    if (enemy != null) enemies.add(enemy);
                     map.add(object);
                 }
+            }
+            //load item
+            int n = sc.nextInt();
+            sc.nextLine();
+            for (int i = 0; i < n; i++) {
+                String temp = sc.nextLine();
+                String[] s = temp.split(" ");
+                if (s[0].equals("b")) {
+                    for (int j = 1; j < s.length; j += 2) {
+                        int xUnit = Integer.parseInt(s[j + 1]);
+                        int yUnit = Integer.parseInt(s[j]);
+                        items.add(new ItemBomb(xUnit, yUnit, Sprite.powerup_bombs.getFxImage()));
+                    }
+                } else if (s[0].equals("s")) {
+                    for (int j = 1; j < s.length; j += 2) {
+                        int xUnit = Integer.parseInt(s[j + 1]);
+                        int yUnit = Integer.parseInt(s[j]);
+                        items.add(new ItemSpeed(xUnit, yUnit, Sprite.powerup_speed.getFxImage()));
+                    }
+                } else if (s[0].equals("f")) {
+                    for (int j = 1; j < s.length; j += 2) {
+                        int xUnit = Integer.parseInt(s[j + 1]);
+                        int yUnit = Integer.parseInt(s[j]);
+                        items.add(new ItemFlame(xUnit, yUnit, Sprite.powerup_flames.getFxImage()));
+                    }
+                }
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -142,9 +177,12 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
-        bomberman.checkMove( bomberman.getBombs());
+        bomberman.checkMove();
         bomberman.update();
+        enemies.forEach(Entity::update);
+        items.forEach(Entity::update);
         map.forEach(Entity::update);
+        updataItem();
         updateMap();
 //        for(Entity entity : map){
 //            entity.update();
@@ -155,18 +193,29 @@ public class BombermanGame extends Application {
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         map.forEach(g -> g.render(gc));
-        //entities.forEach(g -> g.render(gc));
+        items.forEach(g -> g.render(gc));
+        enemies.forEach(g -> g.render(gc));
         bomberman.render(gc);
 
     }
     private void updateMap() {
-        int n= map.size();
-        for(int j = 0;j <n;j++) {
+        int n = map.size();
+        for (int j = 0; j < n; j++) {
             Entity entity = map.get(j);
             if (entity instanceof Brick && ((Brick) entity).isDestroyed) {
-                Entity obj = new Grass(entity.getX()/SCALED_SIZE,entity.getY()/SCALED_SIZE, Sprite.grass.getFxImage());
+                Entity obj = new Grass(entity.getX() / SCALED_SIZE, entity.getY() / SCALED_SIZE, Sprite.grass.getFxImage());
                 map.remove(j);
                 map.add(j, obj);
+            }
+        }
+    }
+
+    private void updataItem() {
+        for (int i = 0; i < items.size(); i++) {
+            if (!items.get(i).isExsist) {
+                System.out.println(3);
+                items.remove(i);
+                return;
             }
         }
     }
