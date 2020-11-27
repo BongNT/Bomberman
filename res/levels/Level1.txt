@@ -12,7 +12,10 @@
 # #*# # # # # # #*# # # # # # #
 #           *   *  *          #
 ###############################
-
+3
+s 1 7
+b 1 8
+f 2 7
 
 Mô tả cấu trúc tệp cấu hình màn chơi:
 1/ Dòng đầu tiên bao gồm 3 số nguyên L, R, C:
@@ -28,7 +31,7 @@ x - Portal
 
 Character:
 p - Bomber
-1 - Balloon
+1 - Balloom
 2 - Oneal
 
 Items:

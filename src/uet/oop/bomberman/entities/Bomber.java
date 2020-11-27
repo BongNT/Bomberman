@@ -13,8 +13,11 @@ import java.util.List;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class Bomber extends Actor {
-    private int maxBomb = 3;
-    private List<Entity> bombs = new ArrayList<>();
+    private final int maxBomb = 5;
+    private int presentBomb = 1;
+    private final int maxSpeed = SCALED_SIZE / 8 * 2;
+
+    private final List<Entity> bombs = new ArrayList<>();
 
     public Bomber(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
@@ -36,6 +39,11 @@ public class Bomber extends Actor {
             for(int j = i; j < bombs.size(); j++) {
                 Bomb bomb2 =(Bomb) bombs.get(j);
                 collisionBomb(bomb, bomb2);
+            }
+            if (bomb.isExploding && bomb.collisionWithActor(this)) {
+                System.out.println("bomber : die");
+                alive = false;
+                //nhan vat chet
             }
         }
     }
@@ -61,33 +69,8 @@ public class Bomber extends Actor {
         }
     }
 
-    @Override
-    public void moveRight() {
-        super.moveRight();
-
-    }
-
-    @Override
-    public void moveLeft() {
-        super.moveLeft();
-
-    }
-
-    @Override
-    public void moveUp() {
-        super.moveUp();
-
-    }
-
-    @Override
-    public void moveDown() {
-        super.moveDown();
-
-    }
-
-
     public void setBomb() {
-        if (bombs.size() >= maxBomb) return;
+        if (bombs.size() >= presentBomb) return;
         int xUnit = (x + SCALED_SIZE / 3) / SCALED_SIZE;
         int yUnit = (y + SCALED_SIZE / 3) / SCALED_SIZE;
         for (int i = 0; i < bombs.size(); i++) {
@@ -99,8 +82,20 @@ public class Bomber extends Actor {
 
     }
 
-    public List<Entity> getBombs() {
-        return bombs;
+    public void increaseBomb() {
+        if (presentBomb < maxBomb) {
+            presentBomb++;
+        }
+    }
+
+    public void increaseSpeed() {
+        if (speed < maxSpeed) {
+            speed += SCALED_SIZE / 16;
+        }
+    }
+
+    public void checkMove() {
+        checkMove(bombs);
     }
 
     @Override
@@ -108,6 +103,7 @@ public class Bomber extends Actor {
         super.render(gc);
         bombs.forEach(g -> g.render(gc));
     }
+
     private void collisionBomb(Bomb bomb1, Bomb bomb2) {
         bomb1.collisionWithBomb(bomb2);
     }

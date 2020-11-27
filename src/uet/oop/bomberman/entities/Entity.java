@@ -43,7 +43,7 @@ public abstract class Entity {
         return new Rectangle(x,y,SCALED_SIZE,SCALED_SIZE);
     }
     public int getPosition() {
-        return x / SCALED_SIZE + y/SCALED_SIZE * WIDTH;
+        return x / SCALED_SIZE + y / SCALED_SIZE * WIDTH;
     }
 
     public int getX() {

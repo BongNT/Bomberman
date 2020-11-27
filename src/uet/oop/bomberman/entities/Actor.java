@@ -17,9 +17,10 @@ public abstract class Actor extends Entity implements Movable{
     protected int speed;
     protected DIR dir;
     protected boolean canMove;
+    public boolean alive;
     public Actor(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
-
+        alive = true;
     }
 
     @Override
@@ -75,53 +76,108 @@ public abstract class Actor extends Entity implements Movable{
         }
         int pos = getPosition();
         Rectangle actor = null;
+        Entity temp1 = null, temp2 = null;
         //kiem tra va cham vs map.
+        int delta = SCALED_SIZE / 4;
         switch (dir) {
             case UP:
-                actor = new Rectangle(x+2, y-speed, SCALED_SIZE-10,SCALED_SIZE);
-                if(!(map.get(pos - WIDTH) instanceof Grass) && checkCollision(actor, map.get(pos - WIDTH).getRec())) {
-                    canMove = false;
-                    return;
+                actor = new Rectangle(x + 2, y - speed, SCALED_SIZE - 10, SCALED_SIZE);
+                temp1 = map.get(pos - WIDTH);
+                temp2 = map.get(pos - WIDTH + 1);
+
+                if (!(temp1 instanceof Grass)) {
+                    if (temp2 instanceof Grass && (temp2.getX() - x >= 0) && (temp2.getX() - x <= delta)) {
+                        x = temp2.getX();
+                        return;
+                    } else if (checkCollision(actor, temp1.getRec())) {
+                        canMove = false;
+                        return;
+                    }
+
                 }
-                if(!(map.get(pos - WIDTH + 1) instanceof Grass) && checkCollision(actor, map.get(pos - WIDTH + 1).getRec())) {
-                    canMove = false;
-                    return;
+                if (!(temp2 instanceof Grass)) {
+                    if (temp1 instanceof Grass && (x - temp1.getX() >= 0) && (x - temp1.getX() <= delta + 5)) {
+                        x = temp1.getX();
+                        break;
+                    } else if (checkCollision(actor, temp2.getRec())) {
+                        canMove = false;
+                        return;
+                    }
                 }
                 break;
 
             case DOWN:
-                actor = new Rectangle(x+2, y+speed, SCALED_SIZE-10,SCALED_SIZE);
-                if(!(map.get(pos + WIDTH) instanceof Grass) && checkCollision(actor, map.get(pos + WIDTH).getRec())) {
-                    canMove = false;
-                    return;
+                actor = new Rectangle(x + 2, y + speed, SCALED_SIZE - 10, SCALED_SIZE);
+                temp1 = map.get(pos + WIDTH);
+                temp2 = map.get(pos + WIDTH + 1);
+                if (!(temp1 instanceof Grass)) {
+                    if (temp2 instanceof Grass && (temp2.getX() - x >= 0) && (temp2.getX() - x <= delta)) {
+                        x = temp2.getX();
+                        break;
+                    } else if (checkCollision(actor, temp1.getRec())) {
+                        canMove = false;
+                        return;
+                    }
+
                 }
-                if(!(map.get(pos + WIDTH + 1) instanceof Grass) && checkCollision(actor, map.get(pos + WIDTH + 1).getRec())) {
-                    canMove = false;
-                    return;
+                if (!(temp2 instanceof Grass)) {
+                    if (temp1 instanceof Grass && (x - temp1.getX() >= 0) && (x - temp1.getX() <= delta + 5)) {
+                        x = temp1.getX();
+                        break;
+                    } else if (checkCollision(actor, temp2.getRec())) {
+                        canMove = false;
+                        return;
+                    }
                 }
                 break;
 
             case LEFT:
-                actor = new Rectangle(x-speed, y+2, SCALED_SIZE-10,SCALED_SIZE-6);
-                if(!(map.get(pos - 1) instanceof Grass) && checkCollision(actor, map.get(pos  - 1).getRec())) {
-                    canMove = false;
-                    return;
+                actor = new Rectangle(x - speed, y + 2, SCALED_SIZE, SCALED_SIZE);
+                temp1 = map.get(pos - 1);
+                temp2 = map.get(pos + WIDTH - 1);
+                if (!(temp1 instanceof Grass)) {
+                    if (temp2 instanceof Grass && temp2.getY() - y >= 0 && temp2.getY() - y <= delta) {
+                        y = temp2.getY();
+                        break;
+                    } else if (checkCollision(actor, temp1.getRec())) {
+                        canMove = false;
+                        return;
+                    }
+
                 }
-                if(!(map.get(pos + WIDTH - 1) instanceof Grass) && checkCollision(actor, map.get(pos + WIDTH - 1).getRec())) {
-                    canMove = false;
-                    return;
+                if (!(temp2 instanceof Grass)) {
+                    if (temp1 instanceof Grass && y - temp1.getY() >= 0 && y - temp1.getY() <= delta) {
+                        y = temp1.getY();
+                        break;
+                    } else if (checkCollision(actor, temp2.getRec())) {
+                        canMove = false;
+                        return;
+                    }
                 }
                 break;
 
             case RIGHT:
-                actor = new Rectangle(x + speed, y+2, SCALED_SIZE-10,SCALED_SIZE-6);
-                if(!(map.get(pos + 1) instanceof Grass) && checkCollision(actor, map.get(pos + 1).getRec())) {
-                    canMove = false;
-                    return;
+                actor = new Rectangle(x + speed, y + 2, SCALED_SIZE, SCALED_SIZE);
+                temp1 = map.get(pos + 1);
+                temp2 = map.get(pos + WIDTH + 1);
+                if (!(temp1 instanceof Grass)) {
+                    if (temp2 instanceof Grass && temp2.getY() - y >= 0 && temp2.getY() - y <= delta) {
+                        y = temp2.getY();
+                        break;
+                    } else if (checkCollision(actor, temp1.getRec())) {
+                        canMove = false;
+                        return;
+                    }
+
                 }
-                if(!(map.get(pos + WIDTH + 1) instanceof Grass) && checkCollision(actor, map.get(pos + WIDTH + 1).getRec())) {
-                    canMove = false;
-                    return;
+                if (!(temp2 instanceof Grass)) {
+                    if (temp1 instanceof Grass && y - temp1.getY() >= 0 && y - temp1.getY() <= delta) {
+                        y = temp1.getY();
+                        break;
+                    } else if (checkCollision(actor, temp2.getRec())) {
+                        canMove = false;
+                        return;
+                    }
                 }
                 break;
 

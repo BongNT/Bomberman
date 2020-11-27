@@ -4,44 +4,52 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.awt.*;
+
 import static uet.oop.bomberman.BombermanGame.*;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
-public class Bomb extends Entity{
+public class Bomb extends Entity {
     public boolean exploded;
-    private boolean isExploding;
+    public boolean isExploding;
     private int timeExsist = FPS * 3;
     private int timeExplode = FPS;
     //độ dài max hiện tại nếu không vướng tường
-    public static int presentFlameLength = 3;
+    private int flameLength = 1;
+    public static int presentFlameLength = 1;
     private final Flame flameUp;
     private final Flame flameDown;
     private final Flame flameLeft;
     private final Flame flameRight;
-    private int upLength = setLengthFlame(DIR.UP);
-    private int downLength = setLengthFlame(DIR.DOWN);
-    private int leftLength = setLengthFlame(DIR.LEFT);
-    private int rightLength = setLengthFlame(DIR.RIGHT);
+    //độ dài thực tế
+    private int upLength;
+    private int downLength;
+    private int leftLength;
+    private int rightLength;
 
-    public Bomb(int x, int y, Image img) {
-        super(x, y, img);
+    public Bomb(int xUnit, int yUnit, Image img) {
+        super(xUnit, yUnit, img);
         exploded = false;
         isExploding = false;
-        flameUp = new Flame(x, y - 1, Sprite.explosion_vertical_top_last.getFxImage(), upLength, DIR.UP);
-        flameDown = new Flame(x, y + 1, Sprite.explosion_vertical_down_last.getFxImage(), downLength, DIR.DOWN);
-        flameLeft = new Flame(x - 1, y, Sprite.explosion_horizontal_left_last.getFxImage(), leftLength, DIR.LEFT);
-        flameRight = new Flame(x + 1, y, Sprite.explosion_horizontal_right_last.getFxImage(), rightLength, DIR.RIGHT);
+        flameLength = presentFlameLength;
+        upLength = setLengthFlame(DIR.UP);
+        downLength = setLengthFlame(DIR.DOWN);
+        leftLength = setLengthFlame(DIR.LEFT);
+        rightLength = setLengthFlame(DIR.RIGHT);
+        flameUp = new Flame(xUnit, yUnit - 1, Sprite.explosion_vertical_top_last.getFxImage(), upLength, DIR.UP);
+        flameDown = new Flame(xUnit, yUnit + 1, Sprite.explosion_vertical_down_last.getFxImage(), downLength, DIR.DOWN);
+        flameLeft = new Flame(xUnit - 1, yUnit, Sprite.explosion_horizontal_left_last.getFxImage(), leftLength, DIR.LEFT);
+        flameRight = new Flame(xUnit + 1, yUnit, Sprite.explosion_horizontal_right_last.getFxImage(), rightLength, DIR.RIGHT);
     }
 
-    public void increaseLength() {
-        presentFlameLength ++;
-        if(presentFlameLength > Flame.maxLength) presentFlameLength = Flame.maxLength;
+    public static void increaseLength() {
+        if (presentFlameLength <= Flame.maxLength) presentFlameLength++;
     }
 
     @Override
     public void update() {
         if (!exploded)
-            img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, timeExsist--, FPS/4).getFxImage();
+            img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, timeExsist--, FPS / 4).getFxImage();
         //trước khi nổ
         if (timeExsist == 0) {
             isExploding = true;
@@ -70,10 +78,10 @@ public class Bomb extends Entity{
     public void render(GraphicsContext gc) {
         super.render(gc);
         if (isExploding) {
-            flameUp.render(gc);
-            flameDown.render(gc);
-            flameLeft.render(gc);
-            flameRight.render(gc);
+            flameUp.render(gc, flameLength);
+            flameDown.render(gc, flameLength);
+            flameLeft.render(gc, flameLength);
+            flameRight.render(gc, flameLength);
         }
     }
 
@@ -82,32 +90,32 @@ public class Bomb extends Entity{
         int length = 0;
         switch (dir) {
             case UP:
-                for(int i = 1; i <= presentFlameLength; i++) {
-                    if(! (map.get(pos - i * WIDTH) instanceof Grass)) {
+                for (int i = 1; i <= flameLength; i++) {
+                    if (!(map.get(pos - i * WIDTH) instanceof Grass)) {
                         break;
                     }
                     length++;
                 }
                 break;
             case DOWN:
-                for(int i = 1; i <= presentFlameLength; i++) {
-                    if(! (map.get(pos + i * WIDTH) instanceof Grass)) {
+                for (int i = 1; i <= flameLength; i++) {
+                    if (!(map.get(pos + i * WIDTH) instanceof Grass)) {
                         break;
                     }
                     length++;
                 }
                 break;
             case LEFT:
-                for(int i = 1; i <= presentFlameLength; i++) {
-                    if(! (map.get(pos - i) instanceof Grass)) {
+                for (int i = 1; i <= flameLength; i++) {
+                    if (!(map.get(pos - i) instanceof Grass)) {
                         break;
                     }
                     length++;
                 }
                 break;
             case RIGHT:
-                for(int i = 1; i <= presentFlameLength; i++) {
-                    if(! (map.get(pos + i ) instanceof Grass)) {
+                for (int i = 1; i <= flameLength; i++) {
+                    if (!(map.get(pos + i) instanceof Grass)) {
                         break;
                     }
                     length++;
@@ -119,7 +127,7 @@ public class Bomb extends Entity{
 
     private void destroyObject() {
         int pos = getPosition();
-        if (upLength < presentFlameLength) {
+        if (upLength < flameLength) {
             upLength++;
         }
         for (int i = 1; i <= upLength; i++) {
@@ -128,7 +136,7 @@ public class Bomb extends Entity{
                 upLength = i;
             }
         }
-        if (downLength < presentFlameLength) {
+        if (downLength < flameLength) {
             downLength++;
         }
         for (int i = 1; i <= downLength; i++) {
@@ -137,7 +145,7 @@ public class Bomb extends Entity{
                 downLength = i;
             }
         }
-        if (leftLength < presentFlameLength) {
+        if (leftLength < flameLength) {
             leftLength++;
         }
         for (int i = 1; i <= leftLength; i++) {
@@ -146,7 +154,7 @@ public class Bomb extends Entity{
                 leftLength = i;
             }
         }
-        if (rightLength < presentFlameLength) {
+        if (rightLength < flameLength) {
             rightLength++;
         }
         for (int i = 1; i <= rightLength; i++) {
@@ -155,7 +163,14 @@ public class Bomb extends Entity{
                 rightLength = i;
             }
         }
-        //kiểm tra vs vị trí qua bomb(vs người và enemies)
+
+
+    }
+
+
+    public boolean collisionWithActor(Actor actor) {
+        Rectangle a = actor.getRec();
+        return checkCollision(a, getVerticalRec()) || checkCollision(a, getHorizontalRec());
     }
 
     /**
@@ -177,6 +192,7 @@ public class Bomb extends Entity{
         }
         return  false;
     }
+
     private void setTime(int timeExplode) {
         timeExsist = 0;
         this.timeExplode = timeExplode;
@@ -208,11 +224,8 @@ public class Bomb extends Entity{
         {
             if((this.isExploding &&!bomb.isExploding) || (!this.isExploding && bomb.isExploding)) {
                 int min = Integer.min(bomb.getTimeExplode(),timeExplode);
-                setTime(min);
-                isExploding =true;
-                bomb.setTime(min);
+                bomb.setTime(min - 1);
                 bomb.isExploding = true;
-
             }
         }
 
