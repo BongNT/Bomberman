@@ -1,4 +1,4 @@
-package uet.oop.bomberman.Main;
+package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -8,8 +8,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import uet.oop.bomberman.Entities.*;
-import uet.oop.bomberman.Graphics.Sprite;
+import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static uet.oop.bomberman.Graphics.Sprite.SCALED_SIZE;
+import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class BombermanGame extends Application {
 

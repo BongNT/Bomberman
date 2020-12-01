@@ -6,9 +6,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static uet.oop.bomberman.BombermanGame.FPS;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
@@ -17,6 +14,7 @@ public class Flame extends Entity {
     private int length = 0;
     public boolean exploded;
     private int timeExplode = FPS;
+
     //các hình ảnh ở giữa
     private Image bodyImg;
     private final DIR dir;
