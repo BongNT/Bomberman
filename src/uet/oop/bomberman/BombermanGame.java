@@ -11,7 +11,8 @@ import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.io.*;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -20,18 +21,16 @@ import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class BombermanGame extends Application {
 
-    public static int WIDTH;
-    public static int HEIGHT;
     public static final int FPS = 20;
     public static final int timeEachFrame = 1000 / FPS;
-
-    private GraphicsContext gc;
-    private Canvas canvas;
-
+    public static int WIDTH;
+    public static int HEIGHT;
     public static List<Entity> enemies = new ArrayList<>();
     public static List<Entity> map = new ArrayList<>();
     public static List<Item> items = new ArrayList<>();
     public static Bomber bomberman = null;
+    private GraphicsContext gc;
+    private Canvas canvas;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -40,8 +39,8 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) {
         createMap();
-        // Tao Canvas
 
+        // Tao Canvas
         canvas = new Canvas(SCALED_SIZE * WIDTH, SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
@@ -53,7 +52,7 @@ public class BombermanGame extends Application {
         Scene scene = new Scene(root);
 
         //tao control
-        scene.setOnKeyPressed(key ->{
+        scene.setOnKeyPressed(key -> {
 
             switch (key.getCode()) {
                 case UP:
@@ -84,13 +83,14 @@ public class BombermanGame extends Application {
             @Override
             public void handle(long t) {
                 long start = System.currentTimeMillis();
-                //cac ham cap nhat.
+
+                // The update funtions
                 update();
                 render();
 
                 long realTime = System.currentTimeMillis() - start;
-                if(realTime < timeEachFrame) {
-                    try{
+                if (realTime < timeEachFrame) {
+                    try {
                         Thread.sleep(timeEachFrame - realTime);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -102,14 +102,15 @@ public class BombermanGame extends Application {
     }
 
     public void createMap() {
-        try{
-            Scanner sc =  new Scanner(new FileReader("res\\levels\\Level1.txt"));
+        try {
+            Scanner sc = new Scanner(new FileReader("res\\levels\\Level1.txt"));
             int level = sc.nextInt();
             HEIGHT = sc.nextInt();
             WIDTH = sc.nextInt();
 
             sc.nextLine();
-            //load map
+
+            // Load map
             for (int i = 0; i < HEIGHT; i++) {
                 String temp = sc.nextLine();
                 for (int j = 0; j < WIDTH; j++) {
@@ -144,7 +145,8 @@ public class BombermanGame extends Application {
                     map.add(object);
                 }
             }
-            //load item
+
+            // Load item
             int n = sc.nextInt();
             sc.nextLine();
             for (int i = 0; i < n; i++) {
@@ -184,10 +186,6 @@ public class BombermanGame extends Application {
         map.forEach(Entity::update);
         updataItem();
         updateMap();
-//        for(Entity entity : map){
-//            entity.update();
-//        }
-        //entities.forEach(Entity::update);
     }
 
     public void render() {
@@ -198,12 +196,14 @@ public class BombermanGame extends Application {
         bomberman.render(gc);
 
     }
+
     private void updateMap() {
         int n = map.size();
         for (int j = 0; j < n; j++) {
             Entity entity = map.get(j);
             if (entity instanceof Brick && ((Brick) entity).isDestroyed) {
-                Entity obj = new Grass(entity.getX() / SCALED_SIZE, entity.getY() / SCALED_SIZE, Sprite.grass.getFxImage());
+                Entity obj = new Grass(entity.getX() / SCALED_SIZE,
+                                       entity.getY() / SCALED_SIZE, Sprite.grass.getFxImage());
                 map.remove(j);
                 map.add(j, obj);
             }
@@ -212,7 +212,7 @@ public class BombermanGame extends Application {
 
     private void updataItem() {
         for (int i = 0; i < items.size(); i++) {
-            if (!items.get(i).isExsist) {
+            if (!items.get(i).isExist) {
                 System.out.println(3);
                 items.remove(i);
                 return;
