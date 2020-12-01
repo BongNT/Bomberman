@@ -234,5 +234,4 @@ public abstract class Actor extends Entity implements Movable{
     }
 
     abstract protected void updateImage();
-
 }
