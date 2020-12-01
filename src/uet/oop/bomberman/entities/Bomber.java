@@ -14,7 +14,7 @@ public class Bomber extends Actor {
     private int presentBomb = 1;
     private final int maxSpeed = SCALED_SIZE / 8 * 2;
 
-    private final List<Entity> bombs = new ArrayList<>();
+    public static List<Entity> bombs = new ArrayList<>();
 
     public Bomber(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
@@ -24,6 +24,7 @@ public class Bomber extends Actor {
 
     @Override
     public void update() {
+        checkMove(bombs);
         move();
         updateImage();
         //load bomb nổ
@@ -91,9 +92,6 @@ public class Bomber extends Actor {
         }
     }
 
-    public void checkMove() {
-        checkMove(bombs);
-    }
 
     @Override
     public void render(GraphicsContext gc) {

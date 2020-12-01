@@ -179,7 +179,6 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
-        bomberman.checkMove();
         bomberman.update();
         enemies.forEach(Entity::update);
         items.forEach(Entity::update);
