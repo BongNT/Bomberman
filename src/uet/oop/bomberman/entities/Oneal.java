@@ -9,6 +9,11 @@ public class Oneal extends Enemy {
     }
 
     @Override
+    public void changeDir() {
+
+    }
+
+    @Override
     protected void updateImage() {
 
     }
