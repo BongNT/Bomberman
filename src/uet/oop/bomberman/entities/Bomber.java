@@ -29,13 +29,13 @@ public class Bomber extends Actor {
         updateImage();
         //load bomb nổ
         for (int i = 0; i < bombs.size(); i++) {
-            Bomb bomb =(Bomb) bombs.get(i);
+            Bomb bomb = (Bomb) bombs.get(i);
             bomb.update();
             if (bomb.exploded) {
                 bombs.remove(i);
             }
-            for(int j = i; j < bombs.size(); j++) {
-                Bomb bomb2 =(Bomb) bombs.get(j);
+            for (int j = i; j < bombs.size(); j++) {
+                Bomb bomb2 = (Bomb) bombs.get(j);
                 collisionBomb(bomb, bomb2);
             }
             if (bomb.isExploding && bomb.collisionWithActor(this)) {

@@ -73,7 +73,6 @@ public class Bomb extends Entity {
     }
 
 
-
     @Override
     public void render(GraphicsContext gc) {
         super.render(gc);
@@ -85,7 +84,7 @@ public class Bomb extends Entity {
         }
     }
 
-    private int setLengthFlame(DIR dir){
+    private int setLengthFlame(DIR dir) {
         int pos = getPosition();
         int length = 0;
         switch (dir) {
@@ -132,7 +131,7 @@ public class Bomb extends Entity {
         }
         for (int i = 1; i <= upLength; i++) {
             int j = pos - i * WIDTH;
-            if(collisionWithMap(j)){
+            if (collisionWithMap(j)) {
                 upLength = i;
             }
         }
@@ -141,7 +140,7 @@ public class Bomb extends Entity {
         }
         for (int i = 1; i <= downLength; i++) {
             int j = pos + i * WIDTH;
-            if(collisionWithMap(j)){
+            if (collisionWithMap(j)) {
                 downLength = i;
             }
         }
@@ -150,7 +149,7 @@ public class Bomb extends Entity {
         }
         for (int i = 1; i <= leftLength; i++) {
             int j = pos - i;
-            if(collisionWithMap(j)){
+            if (collisionWithMap(j)) {
                 leftLength = i;
             }
         }
@@ -159,7 +158,7 @@ public class Bomb extends Entity {
         }
         for (int i = 1; i <= rightLength; i++) {
             int j = pos + i;
-            if(collisionWithMap(j)){
+            if (collisionWithMap(j)) {
                 rightLength = i;
             }
         }
@@ -175,10 +174,11 @@ public class Bomb extends Entity {
 
     /**
      * check collision between flame and map.
+     *
      * @param pos position of entity in map
      * @return return true if flame impact wall, brick.
      */
-    private boolean collisionWithMap(int pos){
+    private boolean collisionWithMap(int pos) {
         if (pos < 0 || pos > map.size()) {
             return true;
         }
@@ -190,7 +190,7 @@ public class Bomb extends Entity {
             ((Brick) temp).destroy();
             return true;
         }
-        return  false;
+        return false;
     }
 
     private void setTime(int timeExplode) {
@@ -205,25 +205,27 @@ public class Bomb extends Entity {
     private int getVerticalLength() {
         return downLength + upLength;
     }
+
     private int getHorizontalLength() {
         return leftLength + rightLength;
     }
+
     private java.awt.Rectangle getHorizontalRec() {
-        return new java.awt.Rectangle(x - leftLength * SCALED_SIZE,y,getHorizontalLength() * SCALED_SIZE, SCALED_SIZE);
+        return new java.awt.Rectangle(x - leftLength * SCALED_SIZE, y, getHorizontalLength() * SCALED_SIZE, SCALED_SIZE);
     }
+
     private java.awt.Rectangle getVerticalRec() {
-        return new java.awt.Rectangle(x , y - upLength * SCALED_SIZE, SCALED_SIZE, getVerticalLength() * SCALED_SIZE);
+        return new java.awt.Rectangle(x, y - upLength * SCALED_SIZE, SCALED_SIZE, getVerticalLength() * SCALED_SIZE);
     }
 
 
     public void collisionWithBomb(Bomb bomb) {
-        if(checkCollision(getRec(), bomb.getHorizontalRec()) ||
+        if (checkCollision(getRec(), bomb.getHorizontalRec()) ||
                 checkCollision(getRec(), bomb.getVerticalRec()) ||
                 checkCollision(getVerticalRec(), bomb.getRec()) ||
-                checkCollision(getHorizontalRec(), bomb.getRec()))
-        {
-            if((this.isExploding &&!bomb.isExploding) || (!this.isExploding && bomb.isExploding)) {
-                int min = Integer.min(bomb.getTimeExplode(),timeExplode);
+                checkCollision(getHorizontalRec(), bomb.getRec())) {
+            if ((this.isExploding && !bomb.isExploding) || (!this.isExploding && bomb.isExploding)) {
+                int min = Integer.min(bomb.getTimeExplode(), timeExplode);
                 bomb.setTime(min - 1);
                 bomb.isExploding = true;
             }

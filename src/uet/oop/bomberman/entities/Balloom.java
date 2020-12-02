@@ -3,17 +3,27 @@ package uet.oop.bomberman.entities;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.awt.*;
+
+import static uet.oop.bomberman.BombermanGame.enemies;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
-public class Balloom extends Actor {
+public class Balloom extends Enemy {
 
     public Balloom(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
-        dir =DIR.LEFT;
-        canMove =true;
-        speed = SCALED_SIZE / 8;
+        dir = DIR.LEFT;
+        canMove = true;
+        speed = SCALED_SIZE / 16;
     }
 
+    @Override
+    public void changeDir() {
+        if (!canMove) {
+            randomDir();
+        }
+
+    }
 
     @Override
     protected void updateImage() {
@@ -37,8 +47,10 @@ public class Balloom extends Actor {
 
     @Override
     public void update() {
+        checkMove(Bomber.bombs);
+        changeDir();
+        checkCollisionEnemies();
         move();
         updateImage();
-        checkMove(Bomber.bombs);
     }
 }

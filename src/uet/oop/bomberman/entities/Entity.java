@@ -26,18 +26,20 @@ public abstract class Entity {
         this.img = img;
     }
 
-    protected boolean checkCollision (Rectangle a1, Rectangle a2) {
+    protected boolean checkCollision(Rectangle a1, Rectangle a2) {
         return a1.intersects(a2);
     }
 
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
     }
+
     public abstract void update();
 
     public Rectangle getRec() {
-        return new Rectangle(x,y,SCALED_SIZE,SCALED_SIZE);
+        return new Rectangle(x, y, SCALED_SIZE, SCALED_SIZE);
     }
+
     public int getPosition() {
         return x / SCALED_SIZE + y / SCALED_SIZE * WIDTH;
     }

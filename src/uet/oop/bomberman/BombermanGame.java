@@ -202,7 +202,7 @@ public class BombermanGame extends Application {
             Entity entity = map.get(j);
             if (entity instanceof Brick && ((Brick) entity).isDestroyed) {
                 Entity obj = new Grass(entity.getX() / SCALED_SIZE,
-                                       entity.getY() / SCALED_SIZE, Sprite.grass.getFxImage());
+                        entity.getY() / SCALED_SIZE, Sprite.grass.getFxImage());
                 map.remove(j);
                 map.add(j, obj);
             }
