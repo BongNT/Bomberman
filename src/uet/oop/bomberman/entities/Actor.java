@@ -81,7 +81,11 @@ public abstract class Actor extends Entity implements Movable{
         int delta = SCALED_SIZE / 4;
         switch (dir) {
             case UP:
-                actor = new Rectangle(x + 2, y - speed, SCALED_SIZE - 10, SCALED_SIZE);
+                actor = new Rectangle(x + 2, y - speed, SCALED_SIZE , SCALED_SIZE);
+                if(pos - WIDTH < 0) {
+                    canMove = false;
+                    return;
+                }
                 temp1 = map.get(pos - WIDTH);
                 temp2 = map.get(pos - WIDTH + 1);
 
@@ -107,7 +111,11 @@ public abstract class Actor extends Entity implements Movable{
                 break;
 
             case DOWN:
-                actor = new Rectangle(x + 2, y + speed, SCALED_SIZE - 10, SCALED_SIZE);
+                actor = new Rectangle(x + 2, y + speed, SCALED_SIZE, SCALED_SIZE);
+                if(pos + WIDTH + 1 >= map.size()) {
+                    canMove = false;
+                    return;
+                }
                 temp1 = map.get(pos + WIDTH);
                 temp2 = map.get(pos + WIDTH + 1);
                 if (!(temp1 instanceof Grass)) {
@@ -133,6 +141,10 @@ public abstract class Actor extends Entity implements Movable{
 
             case LEFT:
                 actor = new Rectangle(x - speed, y + 2, SCALED_SIZE, SCALED_SIZE);
+                if(pos - 1 < 0 || pos + WIDTH - 1 >= map.size()) {
+                    canMove = false;
+                    return;
+                }
                 temp1 = map.get(pos - 1);
                 temp2 = map.get(pos + WIDTH - 1);
                 if (!(temp1 instanceof Grass)) {
@@ -158,6 +170,10 @@ public abstract class Actor extends Entity implements Movable{
 
             case RIGHT:
                 actor = new Rectangle(x + speed, y + 2, SCALED_SIZE, SCALED_SIZE);
+                if(pos - 1 < 0 || pos + WIDTH + 1 >= map.size()) {
+                    canMove = false;
+                    return;
+                }
                 temp1 = map.get(pos + 1);
                 temp2 = map.get(pos + WIDTH + 1);
                 if (!(temp1 instanceof Grass)) {
@@ -186,40 +202,10 @@ public abstract class Actor extends Entity implements Movable{
         actor = new Rectangle(x , y, SCALED_SIZE ,SCALED_SIZE);
         for (int i = 0; i < bombs.size(); i++) {
             if(!checkCollision(actor, bombs.get(i).getRec())) {
-                Rectangle tempActor = null;
-                switch (dir) {
-                    case UP:
-                        tempActor = new Rectangle(x, y-speed, SCALED_SIZE,SCALED_SIZE);
-                        if(checkCollision(tempActor, bombs.get(i).getRec())) {
-                            canMove = false;
-                            return;
-                        }
-                        break;
-
-                    case DOWN:
-                        tempActor = new Rectangle(x, y+speed, SCALED_SIZE,SCALED_SIZE);
-                        if(checkCollision(tempActor, bombs.get(i).getRec())) {
-                            canMove = false;
-                            return;
-                        }
-                        break;
-
-                    case LEFT:
-                        tempActor = new Rectangle(x-speed, y, SCALED_SIZE,SCALED_SIZE);
-                        if(checkCollision(tempActor, bombs.get(i).getRec())) {
-                            canMove = false;
-                            return;
-                        }
-                        break;
-
-                    case RIGHT:
-                        tempActor = new Rectangle(x + speed, y, SCALED_SIZE,SCALED_SIZE);
-                        if(checkCollision(tempActor, bombs.get(i).getRec())) {
-                            canMove = false;
-                            return;
-                        }
-                        break;
-
+                Rectangle tempActor = getRecNextStep();
+                if(checkCollision(tempActor, bombs.get(i).getRec())) {
+                    canMove = false;
+                    return;
                 }
             }
         }
@@ -231,6 +217,21 @@ public abstract class Actor extends Entity implements Movable{
         //if(presentImg == timeAnimate) presentImg = 0;
         presentImg %= timeAnimate;
         return Sprite.movingSprite(normal, x1, x2, (presentImg++) ,timeAnimate).getFxImage();
+    }
+
+    public Rectangle getRecNextStep(){
+        switch (dir){
+            case UP:
+                return new Rectangle(x, y-speed, SCALED_SIZE,SCALED_SIZE);
+            case DOWN:
+                return new Rectangle(x, y+speed, SCALED_SIZE,SCALED_SIZE);
+            case LEFT:
+                return new Rectangle(x-speed, y, SCALED_SIZE,SCALED_SIZE);
+            case RIGHT:
+                return new Rectangle(x + speed, y, SCALED_SIZE,SCALED_SIZE);
+        }
+        return null;
+
     }
 
     abstract protected void updateImage();

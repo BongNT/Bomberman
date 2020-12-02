@@ -5,34 +5,29 @@ import javafx.scene.image.Image;
 import static uet.oop.bomberman.BombermanGame.enemies;
 
 public abstract class Enemy extends Actor {
-    protected boolean flag = false;
+
 
     public Enemy(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
 
-    public void changeDir() {
-        dir = DIR.random();
-        while (dir == DIR.DEFAULT) {
-            dir = DIR.random();
-        }
-    }
+    public abstract void changeDir();
 
     protected void checkCollisionEnemies() {
         for (int i = 0; i < enemies.size(); i++) {
-            Enemy temp = (Enemy) enemies.get(i);
-            if (temp != this) {
-                if (checkCollision(this.getRec(), temp.getRec())) {
-                    flag = true;
-                    this.reverseDIR();
-                    temp.reverseDIR();
+            Enemy enemy = (Enemy) enemies.get(i);
+            if (enemy != this && enemy.canMove) {
+                if (checkCollision(this.getRecNextStep(), enemy.getRecNextStep())) {
+                    this.canMove = false;
+                    enemy.canMove = false;
+                    this.reverseDir();
+                    enemy.reverseDir();
                 }
             }
-            flag = false;
         }
     }
 
-    public void reverseDIR() {
+    public void reverseDir() {
         switch (dir) {
             case UP:
                 dir = DIR.DOWN;
@@ -46,6 +41,13 @@ public abstract class Enemy extends Actor {
             case RIGHT:
                 dir = DIR.LEFT;
                 break;
+        }
+    }
+
+    public void randomDir() {
+        dir = DIR.random();
+        while (dir == DIR.DEFAULT) {
+            dir = DIR.random();
         }
     }
 }

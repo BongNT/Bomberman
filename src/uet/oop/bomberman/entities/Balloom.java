@@ -17,6 +17,13 @@ public class Balloom extends Enemy {
         speed = SCALED_SIZE / 8;
     }
 
+    @Override
+    public void changeDir() {
+        if(!canMove) {
+            randomDir();
+        }
+    }
+
 
     @Override
     protected void updateImage() {
@@ -41,9 +48,10 @@ public class Balloom extends Enemy {
     @Override
     public void update() {
         checkMove(Bomber.bombs);
-        move();
+        changeDir();
+
         checkCollisionEnemies();
-        if (!canMove && !flag) changeDir();
+        move();
         updateImage();
     }
 }
