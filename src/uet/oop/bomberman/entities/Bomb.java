@@ -9,19 +9,21 @@ import java.awt.*;
 import static uet.oop.bomberman.BombermanGame.*;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
-public class Bomb extends Entity {
+public class Bomb extends Entity implements Destroyable {
     public boolean exploded;
     public boolean isExploding;
-    private int timeExsist = FPS * 3;
+    private int timeExist = FPS * 3;
     private int timeExplode = FPS;
-    //độ dài max hiện tại nếu không vướng tường
+
+    // Current max length if not stuck with in wall
     private int flameLength = 1;
-    public static int presentFlameLength = 1;
+    public static int presentFlameLength = 3;
     private final Flame flameUp;
     private final Flame flameDown;
     private final Flame flameLeft;
     private final Flame flameRight;
-    //độ dài thực tế
+
+    // Actual length
     private int upLength;
     private int downLength;
     private int leftLength;
@@ -48,17 +50,18 @@ public class Bomb extends Entity {
 
     @Override
     public void update() {
-        if (!exploded)
-            img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, timeExsist--, FPS / 4).getFxImage();
+
+        if (!exploded) {
+            img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, timeExist--, FPS / 4).getFxImage();
+        }
         //trước khi nổ
-        if (timeExsist == 0) {
+        if (timeExist == 0) {
             isExploding = true;
-            timeExsist = FPS * 3;
+            //timeExsist = FPS * 3;
         }
         //bomb nổ
         if (isExploding) {
-            img = Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1,
-                    Sprite.bomb_exploded2, timeExplode--, FPS).getFxImage();
+            loadDestroyImg();
             destroyObject();
             flameUp.update();
             flameDown.update();
@@ -71,8 +74,6 @@ public class Bomb extends Entity {
             exploded = true;
         }
     }
-
-
 
     @Override
     public void render(GraphicsContext gc) {
@@ -193,9 +194,15 @@ public class Bomb extends Entity {
         return  false;
     }
 
-    private void setTime(int timeExplode) {
-        timeExsist = 0;
+    private void setBombExplode(int timeExplode) {
+        timeExist = 0;
         this.timeExplode = timeExplode;
+        isExploding = true;
+        timeExist = 0;
+        flameUp.setTimeExplode(timeExplode);
+        flameRight.setTimeExplode(timeExplode);
+        flameLeft.setTimeExplode(timeExplode);
+        flameDown.setTimeExplode(timeExplode);
     }
 
     public int getTimeExplode() {
@@ -222,12 +229,18 @@ public class Bomb extends Entity {
                 checkCollision(getVerticalRec(), bomb.getRec()) ||
                 checkCollision(getHorizontalRec(), bomb.getRec()))
         {
-            if((this.isExploding &&!bomb.isExploding) || (!this.isExploding && bomb.isExploding)) {
-                int min = Integer.min(bomb.getTimeExplode(),timeExplode);
-                bomb.setTime(min - 1);
-                bomb.isExploding = true;
+            if((this.isExploding &&!bomb.isExploding)) {
+                //int min = Integer.min(bomb.getTimeExplode(),timeExplode);
+                bomb.setBombExplode(timeExplode);
             }
         }
+
+    }
+
+    @Override
+    public void loadDestroyImg() {
+        img = Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1,
+                Sprite.bomb_exploded2, timeExplode--, FPS).getFxImage();
 
     }
 }

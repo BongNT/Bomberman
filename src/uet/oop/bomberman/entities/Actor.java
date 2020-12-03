@@ -10,17 +10,21 @@ import java.util.List;
 import static uet.oop.bomberman.BombermanGame.WIDTH;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
-public abstract class Actor extends Entity implements Movable{
-    //số lần thay đổi ảnh
+public abstract class Actor extends Entity implements Movable, Destroyable{
+    // Number of changing image
     protected int timeAnimate = 6;
     protected int presentImg = 2;
     protected int speed;
     protected DIR dir;
     protected boolean canMove;
     public boolean alive;
+    protected boolean loadDead;
+    protected int timeLoadDead = FPS;
     public Actor(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
         alive = true;
+        loadDead = false;
+
     }
 
     @Override
@@ -49,6 +53,7 @@ public abstract class Actor extends Entity implements Movable{
     }
 
     protected void move(){
+        if(!alive || loadDead) return;
         if (!canMove) return;
         switch (dir) {
             case UP:
@@ -70,6 +75,10 @@ public abstract class Actor extends Entity implements Movable{
 
     @Override
     public void checkMove(List<Entity> bombs) {
+        if(!alive || loadDead) {
+            canMove = false;
+            return;
+        }
         if(dir == DIR.DEFAULT){
             canMove = false;
             return;
@@ -198,7 +207,8 @@ public abstract class Actor extends Entity implements Movable{
                 break;
 
         }
-        //kiem tra va cham vs bomb.
+
+        // Check collision with bomb
         actor = new Rectangle(x , y, SCALED_SIZE ,SCALED_SIZE);
         for (int i = 0; i < bombs.size(); i++) {
             if(!checkCollision(actor, bombs.get(i).getRec())) {
@@ -214,7 +224,6 @@ public abstract class Actor extends Entity implements Movable{
     }
 
     protected Image animateImage(Sprite normal, Sprite x1, Sprite x2) {
-        //if(presentImg == timeAnimate) presentImg = 0;
         presentImg %= timeAnimate;
         return Sprite.movingSprite(normal, x1, x2, (presentImg++) ,timeAnimate).getFxImage();
     }

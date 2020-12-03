@@ -15,7 +15,7 @@ public class Flame extends Entity {
     public boolean exploded;
     private int timeExplode = FPS;
 
-    //các hình ảnh ở giữa
+    // Center images
     private Image bodyImg;
     private final DIR dir;
 
@@ -30,8 +30,6 @@ public class Flame extends Entity {
         this.dir = dir;
     }
 
-
-
     @Override
     public void update() {
         if (timeExplode == 0) {
@@ -39,23 +37,28 @@ public class Flame extends Entity {
             return;
         }
         if(length == 0) return;
+        timeExplode--;
         if (length >= 1) {
             switch (dir) {
                 case UP :
-                    img = Sprite.movingSprite(Sprite.explosion_vertical_top_last, Sprite.explosion_vertical_top_last1,
-                            Sprite.explosion_vertical_top_last2, --timeExplode, FPS ).getFxImage();
+                    img = Sprite.movingSprite(Sprite.explosion_vertical_top_last,
+                            Sprite.explosion_vertical_top_last1,
+                            Sprite.explosion_vertical_top_last2, timeExplode, FPS ).getFxImage();
                     break;
                 case DOWN:
-                    img = Sprite.movingSprite(Sprite.explosion_vertical_down_last, Sprite.explosion_vertical_down_last1,
-                            Sprite.explosion_vertical_down_last2, --timeExplode, FPS ).getFxImage();
+                    img = Sprite.movingSprite(Sprite.explosion_vertical_down_last,
+                            Sprite.explosion_vertical_down_last1,
+                            Sprite.explosion_vertical_down_last2, timeExplode, FPS ).getFxImage();
                     break;
                 case LEFT:
-                    img = Sprite.movingSprite(Sprite.explosion_horizontal_left_last, Sprite.explosion_horizontal_left_last1,
-                            Sprite.explosion_horizontal_left_last2, --timeExplode, FPS ).getFxImage();
+                    img = Sprite.movingSprite(Sprite.explosion_horizontal_left_last,
+                            Sprite.explosion_horizontal_left_last1,
+                            Sprite.explosion_horizontal_left_last2, timeExplode, FPS ).getFxImage();
                     break;
                 case RIGHT:
-                    img = Sprite.movingSprite(Sprite.explosion_horizontal_right_last, Sprite.explosion_horizontal_right_last1,
-                            Sprite.explosion_horizontal_right_last2, --timeExplode, FPS ).getFxImage();
+                    img = Sprite.movingSprite(Sprite.explosion_horizontal_right_last,
+                            Sprite.explosion_horizontal_right_last1,
+                            Sprite.explosion_horizontal_right_last2, timeExplode, FPS ).getFxImage();
                     break;
                 default:
                     break;
@@ -67,12 +70,12 @@ public class Flame extends Entity {
                 case UP :
                 case DOWN:
                     bodyImg = Sprite.movingSprite(Sprite.explosion_vertical, Sprite.explosion_vertical1,
-                                Sprite.explosion_vertical2, --timeExplode, FPS ).getFxImage();
+                            Sprite.explosion_vertical2, timeExplode, FPS ).getFxImage();
                     break;
                 case LEFT:
                 case RIGHT:
-                     bodyImg = Sprite.movingSprite(Sprite.explosion_horizontal, Sprite.explosion_horizontal1,
-                                Sprite.explosion_horizontal2, --timeExplode, FPS ).getFxImage();
+                    bodyImg = Sprite.movingSprite(Sprite.explosion_horizontal, Sprite.explosion_horizontal1,
+                            Sprite.explosion_horizontal2, timeExplode, FPS ).getFxImage();
                     break;
                 default:
                     break;
@@ -83,9 +86,7 @@ public class Flame extends Entity {
 
 
     public void render(GraphicsContext gc, int flameLength) {
-        /*for (Image image : images) {
-            gc.drawImage(image, x, y);
-        }*/
+
         if (length == 1) {
             super.render(gc);
         } else if (length > 0) {
@@ -117,9 +118,11 @@ public class Flame extends Entity {
                 default:
                     break;
             }
-
         }
+    }
 
+    public void setTimeExplode(int timeExplode) {
+        this.timeExplode = timeExplode;
     }
 }
 

@@ -25,7 +25,7 @@ public class BombermanGame extends Application {
     public static final int timeEachFrame = 1000 / FPS;
     public static int WIDTH;
     public static int HEIGHT;
-    public static List<Entity> enemies = new ArrayList<>();
+    public static List<Enemy> enemies = new ArrayList<>();
     public static List<Entity> map = new ArrayList<>();
     public static List<Item> items = new ArrayList<>();
     public static Bomber bomberman = null;
@@ -40,18 +40,18 @@ public class BombermanGame extends Application {
     public void start(Stage stage) {
         createMap();
 
-        // Tao Canvas
+        // Create Canvas
         canvas = new Canvas(SCALED_SIZE * WIDTH, SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
-        // Tao root container
+        // Create root container
         Group root = new Group();
         root.getChildren().add(canvas);
 
-        // Tao scene
+        // Create scene
         Scene scene = new Scene(root);
 
-        //tao control
+        // Create control
         scene.setOnKeyPressed(key -> {
 
             switch (key.getCode()) {
@@ -75,7 +75,7 @@ public class BombermanGame extends Application {
         scene.setOnKeyReleased((KeyEvent key) -> bomberman.notMoving());
 
 
-        // Them scene vao stage
+        // Insert scene into stage
         stage.setScene(scene);
         stage.show();
 
@@ -84,7 +84,7 @@ public class BombermanGame extends Application {
             public void handle(long t) {
                 long start = System.currentTimeMillis();
 
-                // The update funtions
+                // The update functions
                 update();
                 render();
 
@@ -115,7 +115,7 @@ public class BombermanGame extends Application {
                 String temp = sc.nextLine();
                 for (int j = 0; j < WIDTH; j++) {
                     Entity object = null;
-                    Entity enemy = null;
+                    Enemy enemy = null;
                     char p = temp.charAt(j);
 
                     switch (p) {
@@ -180,10 +180,10 @@ public class BombermanGame extends Application {
 
     public void update() {
         bomberman.update();
-        enemies.forEach(Entity::update);
+        updateEnemy();
         items.forEach(Entity::update);
         map.forEach(Entity::update);
-        updataItem();
+        updateItem();
         updateMap();
     }
 
@@ -202,19 +202,30 @@ public class BombermanGame extends Application {
             Entity entity = map.get(j);
             if (entity instanceof Brick && ((Brick) entity).isDestroyed) {
                 Entity obj = new Grass(entity.getX() / SCALED_SIZE,
-                                       entity.getY() / SCALED_SIZE, Sprite.grass.getFxImage());
+                        entity.getY() / SCALED_SIZE, Sprite.grass.getFxImage());
                 map.remove(j);
                 map.add(j, obj);
             }
         }
     }
 
-    private void updataItem() {
+    private void updateItem() {
         for (int i = 0; i < items.size(); i++) {
             if (!items.get(i).isExist) {
-                System.out.println(3);
                 items.remove(i);
                 return;
+            }
+        }
+    }
+
+    private void updateEnemy() {
+        for (int i = 0; i < enemies.size(); i++) {
+            Enemy enemy = enemies.get(i);
+            if(enemy !=null) {
+                enemy.update();
+                if(!enemy.alive) {
+                    enemies.remove(enemy);
+                }
             }
         }
     }

@@ -6,7 +6,6 @@ import static uet.oop.bomberman.BombermanGame.enemies;
 
 public abstract class Enemy extends Actor {
 
-
     public Enemy(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
@@ -28,6 +27,7 @@ public abstract class Enemy extends Actor {
     }
 
     public void reverseDir() {
+        if(!alive || loadDead) return;
         switch (dir) {
             case UP:
                 dir = DIR.DOWN;
@@ -45,9 +45,23 @@ public abstract class Enemy extends Actor {
     }
 
     public void randomDir() {
+        if(!alive || loadDead) return;
         dir = DIR.random();
         while (dir == DIR.DEFAULT) {
             dir = DIR.random();
         }
+    }
+
+    @Override
+    public void update() {
+        if(loadDead) {
+            loadDestroyImg();
+            return;
+        }
+        checkMove(Bomber.bombs);
+        changeDir();
+        checkCollisionEnemies();
+        move();
+        updateImage();
     }
 }

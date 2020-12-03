@@ -3,9 +3,6 @@ package uet.oop.bomberman.entities;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.awt.*;
-
-import static uet.oop.bomberman.BombermanGame.enemies;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class Balloom extends Enemy {
@@ -14,7 +11,7 @@ public class Balloom extends Enemy {
         super(xUnit, yUnit, img);
         dir = DIR.LEFT;
         canMove = true;
-        speed = SCALED_SIZE / 8;
+        speed = SCALED_SIZE / 16;
     }
 
     @Override
@@ -24,19 +21,14 @@ public class Balloom extends Enemy {
         }
     }
 
-
     @Override
     protected void updateImage() {
         switch (dir) {
             case LEFT:
-                img = animateImage(Sprite.balloom_left1, Sprite.balloom_left2, Sprite.balloom_left3);
-                break;
             case DOWN:
                 img = animateImage(Sprite.balloom_left1, Sprite.balloom_left2, Sprite.balloom_left3);
                 break;
             case UP:
-                img = animateImage(Sprite.balloom_right1, Sprite.balloom_right2, Sprite.balloom_right3);
-                break;
             case RIGHT:
                 img = animateImage(Sprite.balloom_right1, Sprite.balloom_right2, Sprite.balloom_right3);
                 break;
@@ -46,12 +38,11 @@ public class Balloom extends Enemy {
     }
 
     @Override
-    public void update() {
-        checkMove(Bomber.bombs);
-        changeDir();
-
-        checkCollisionEnemies();
-        move();
-        updateImage();
+    public void loadDestroyImg() {
+        if(timeLoadDead == 0) {
+            alive = false;
+        }
+        img = Sprite.balloom_dead.getFxImage();
+        timeLoadDead--;
     }
 }

@@ -4,13 +4,17 @@ public class HighScore {
     private String name;
     private int score;
 
-    public String getName() {
-        return name;
+    public HighScore() {
+
     }
 
     public HighScore(String name, int score) {
         this.name = name;
         this.score = score;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {

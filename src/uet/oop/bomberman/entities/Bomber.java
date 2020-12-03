@@ -7,11 +7,13 @@ import uet.oop.bomberman.graphics.Sprite;
 import java.util.ArrayList;
 import java.util.List;
 
+import static uet.oop.bomberman.BombermanGame.FPS;
+import static uet.oop.bomberman.BombermanGame.enemies;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class Bomber extends Actor {
     private final int maxBomb = 5;
-    private int presentBomb = 1;
+    private int presentBomb = 3;
     private final int maxSpeed = SCALED_SIZE / 8 * 2;
 
     public static List<Entity> bombs = new ArrayList<>();
@@ -27,22 +29,42 @@ public class Bomber extends Actor {
         checkMove(bombs);
         move();
         updateImage();
-        //load bomb nổ
+
+        // Load bomb explosion
         for (int i = 0; i < bombs.size(); i++) {
             Bomb bomb =(Bomb) bombs.get(i);
-            bomb.update();
             if (bomb.exploded) {
                 bombs.remove(i);
             }
-            for(int j = i; j < bombs.size(); j++) {
+        }
+        for (int i = 0; i < bombs.size(); i++) {
+            Bomb bomb =(Bomb) bombs.get(i);
+            bomb.update();
+            for(int j = i+1; j < bombs.size(); j++) {
                 Bomb bomb2 =(Bomb) bombs.get(j);
                 collisionBomb(bomb, bomb2);
             }
-            if (bomb.isExploding && bomb.collisionWithActor(this)) {
-                System.out.println("bomber : die");
-                alive = false;
-                //nhan vat chet
+            if(bomb.isExploding) {
+                if (!loadDead && bomb.collisionWithActor(this)) {
+                    // Actor died
+                    System.out.println("bomber : die");
+                    //loadDead = true;
+                    break;
+                }
+                int n = enemies.size();
+                for(int j = 0; j < n; j++) {
+                    Enemy enemy = (Enemy) enemies.get(j);
+                    if(!enemy.loadDead && bomb.collisionWithActor(enemy)) {
+                        enemy.loadDead = true;
+                        System.out.println("enemydie");
+                    }
+                }
+
             }
+
+        }
+        if(loadDead) {
+            loadDestroyImg();
         }
     }
 
@@ -101,5 +123,14 @@ public class Bomber extends Actor {
 
     private void collisionBomb(Bomb bomb1, Bomb bomb2) {
         bomb1.collisionWithBomb(bomb2);
+    }
+
+    @Override
+    public void loadDestroyImg() {
+        if (timeLoadDead == 0) {
+            alive = false;
+        }
+        img = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3
+                ,timeLoadDead-- ,FPS).getFxImage();
     }
 }

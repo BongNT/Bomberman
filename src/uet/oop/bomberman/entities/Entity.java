@@ -9,6 +9,7 @@ import static uet.oop.bomberman.BombermanGame.WIDTH;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public abstract class Entity {
+
     //Tọa độ X tính từ góc trái trên trong Canvas
     protected int x;
 
@@ -19,7 +20,7 @@ public abstract class Entity {
 
     protected Image img;
 
-    //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
+    // Initialize object, convert from unit to canvas coordinate
     public Entity(int xUnit, int yUnit, Image img) {
         this.x = xUnit * SCALED_SIZE;
         this.y = yUnit * SCALED_SIZE;

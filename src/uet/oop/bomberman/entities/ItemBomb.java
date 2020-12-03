@@ -14,6 +14,4 @@ public class ItemBomb extends Item {
         bomberman.increaseBomb();
         System.out.println(2);
     }
-
-
 }

@@ -7,6 +7,8 @@ import java.util.Random;
 
 enum DIR {
     DEFAULT, UP, DOWN, LEFT, RIGHT;
+
+    // Get random direction
     private static final List<DIR> VALUES =
             Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
