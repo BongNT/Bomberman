@@ -10,7 +10,7 @@ import static uet.oop.bomberman.BombermanGame.FPS;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class Flame extends Entity {
-    public static final int maxLength = 5;
+    public static final int maxLength = 4;
     private int length = 0;
     public boolean exploded;
     private int timeExplode = FPS;

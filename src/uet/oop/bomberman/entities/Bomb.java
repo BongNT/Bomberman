@@ -16,8 +16,8 @@ public class Bomb extends Entity implements Destroyable {
     private int timeExplode = FPS;
 
     // Current max length if not stuck with in wall
-    private int flameLength = 1;
-    public static int presentFlameLength = 3;
+    private int flameLength = 2;
+    public static int presentFlameLength = 2;
     private final Flame flameUp;
     private final Flame flameDown;
     private final Flame flameLeft;
@@ -164,13 +164,16 @@ public class Bomb extends Entity implements Destroyable {
                 rightLength = i;
             }
         }
-
-
     }
 
 
     public boolean collisionWithActor(Actor actor) {
-        Rectangle a = actor.getRec();
+        if(actor instanceof Bomber) {
+            Rectangle a = new Rectangle(actor.getX() + 5, actor.getY()+ 5,SCALED_SIZE - 15, SCALED_SIZE - 15);
+            //Rectangle a = actor.getRec();
+            return checkCollision(a, getVerticalRec()) || checkCollision(a, getHorizontalRec());
+        }
+        Rectangle a = new Rectangle(actor.getX(), actor.getY(), SCALED_SIZE - 10, SCALED_SIZE);
         return checkCollision(a, getVerticalRec()) || checkCollision(a, getHorizontalRec());
     }
 
@@ -210,10 +213,10 @@ public class Bomb extends Entity implements Destroyable {
     }
 
     private int getVerticalLength() {
-        return downLength + upLength;
+        return downLength + upLength + 1;
     }
     private int getHorizontalLength() {
-        return leftLength + rightLength;
+        return leftLength + rightLength + 1;
     }
     private java.awt.Rectangle getHorizontalRec() {
         return new java.awt.Rectangle(x - leftLength * SCALED_SIZE,y,getHorizontalLength() * SCALED_SIZE, SCALED_SIZE);
@@ -234,7 +237,6 @@ public class Bomb extends Entity implements Destroyable {
                 bomb.setBombExplode(timeExplode);
             }
         }
-
     }
 
     @Override
@@ -243,5 +245,6 @@ public class Bomb extends Entity implements Destroyable {
                 Sprite.bomb_exploded2, timeExplode--, FPS).getFxImage();
 
     }
+
 }
 

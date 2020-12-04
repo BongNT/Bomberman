@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-enum DIR {
+public enum DIR {
     DEFAULT, UP, DOWN, LEFT, RIGHT;
 
     // Get random direction

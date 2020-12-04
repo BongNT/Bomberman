@@ -21,7 +21,7 @@ public class HighScoreGUI extends Application {
 
     public void start(Stage stage) throws FileNotFoundException {
 
-        Image image = new Image(new FileInputStream("src\\uet\\oop\\bomberman\\HighScore\\background.jpg"));
+        Image image = new Image(new FileInputStream("res/img/menu/background.jpg"));
         ImageView mv = new ImageView(image);
         Group root = new Group();
         root.getChildren().addAll(mv);

@@ -12,6 +12,5 @@ public class ItemBomb extends Item {
     @Override
     public void powerUpBomber() {
         bomberman.increaseBomb();
-        System.out.println(2);
     }
 }

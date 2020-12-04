@@ -17,14 +17,11 @@ public abstract class Actor extends Entity implements Movable, Destroyable{
     protected int speed;
     protected DIR dir;
     protected boolean canMove;
-    public boolean alive;
-    protected boolean loadDead;
+    public boolean alive =true;
+    protected boolean loadDead = false;
     protected int timeLoadDead = FPS;
     public Actor(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
-        alive = true;
-        loadDead = false;
-
     }
 
     @Override

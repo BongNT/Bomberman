@@ -58,9 +58,9 @@ public abstract class Enemy extends Actor {
             loadDestroyImg();
             return;
         }
-        checkMove(Bomber.bombs);
         changeDir();
         checkCollisionEnemies();
+        checkMove(Bomber.bombs);
         move();
         updateImage();
     }

@@ -3,8 +3,11 @@ package uet.oop.bomberman.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.awt.*;
+
 import static uet.oop.bomberman.BombermanGame.bomberman;
 import static uet.oop.bomberman.BombermanGame.map;
+import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public abstract class Item extends Entity {
     public boolean isExist = true;
@@ -12,6 +15,11 @@ public abstract class Item extends Entity {
 
     public Item(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
+    }
+
+    @Override
+    public Rectangle getRec() {
+        return new Rectangle(x + SCALED_SIZE / 4,y + SCALED_SIZE / 4,SCALED_SIZE / 2,SCALED_SIZE / 2);
     }
 
     @Override
