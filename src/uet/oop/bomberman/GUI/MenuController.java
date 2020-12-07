@@ -42,6 +42,7 @@ public class MenuController implements Initializable {
         Parent root = loader.load();
         Scene scene = new Scene(root);
         LoginController controller = loader.getController();
+        stage.setTitle("LOGIN");
         stage.setScene(scene);
     }
 
@@ -119,9 +120,7 @@ public class MenuController implements Initializable {
         setShadow();
 
         // Handle button EXIT
-        bExit.setOnAction(event -> {
-            setExitButton();
-        });
+        bExit.setOnAction(event -> setExitButton());
 
         // Handle button INSTRUCTION
         bInstruction.setOnAction(event -> {
@@ -134,7 +133,6 @@ public class MenuController implements Initializable {
             try {
                 setPlayButton();
             } catch (IOException ioException) {
-                System.out.println("Unchecked");
                 ioException.getMessage();
             }
         });
