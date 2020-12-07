@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uet.oop.bomberman.GUI.HighScoreController">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../res/img/menu/score.jpg" />
+         </image>
+      </ImageView>
+      <TableView blendMode="DARKEN" fixedCellSize="0.0" layoutX="200.0" layoutY="78.0" prefHeight="284.0" prefWidth="200.0">
+        <columns>
+          <TableColumn editable="false" prefWidth="97.0" resizable="false" sortType="DESCENDING" text="NAME" />
+          <TableColumn editable="false" prefWidth="102.0" sortType="DESCENDING" text="SCORE" />
+        </columns>
+      </TableView>
+      <Text layoutX="102.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="~   HIGH SCORE   ~" textAlignment="CENTER" wrappingWidth="396.0">
+         <font>
+            <Font name="Jokerman" size="32.0" />
+         </font>
+      </Text>
+      <Button fx:id="bBack" blendMode="HARD_LIGHT" contentDisplay="CENTER" layoutX="498.0" layoutY="314.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="101.0" text="BACK" textAlignment="CENTER" textFill="#e50909" underline="true">
+         <font>
+            <Font name="Jokerman" size="20.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

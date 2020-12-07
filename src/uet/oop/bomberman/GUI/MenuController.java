@@ -35,6 +35,16 @@ public class MenuController implements Initializable {
     @FXML
     private Button bExit;
 
+    public void setHighScoreButton() throws IOException {
+        Stage stage = (Stage) bPlay.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(
+                new File("src\\uet\\oop\\bomberman\\GUI\\HighScore.fxml").toURI().toURL());
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        stage.setTitle("HIGH SCORE");
+        stage.setScene(scene);
+    }
+
     public void setPlayButton() throws IOException {
         Stage stage = (Stage) bPlay.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(
@@ -139,6 +149,11 @@ public class MenuController implements Initializable {
 
         // Handle button HIGH SCORE
         bHighScore.setOnAction(event -> {
+            try {
+                setHighScoreButton();
+            } catch (IOException ioException) {
+                ioException.getMessage();
+            }
         });
     }
 }
