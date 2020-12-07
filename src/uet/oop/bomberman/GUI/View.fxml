@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uet.oop.bomberman.GUI.MenuController">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../res/img/menu/mainMenu.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="bPlay" layoutX="16.0" layoutY="188.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="145.0" text="PLAY GAME" textAlignment="CENTER" textFill="#2908e4">
+         <font>
+            <Font name="Jokerman" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="bHighScore" layoutX="197.0" layoutY="188.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="145.0" text="HIGH SCORE" textAlignment="CENTER" textFill="#0413dd">
+         <font>
+            <Font name="Jokerman" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="bInstruction" layoutX="16.0" layoutY="290.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="145.0" text="INSTRUCTION" textAlignment="CENTER" textFill="#0b2be4">
+         <font>
+            <Font name="Jokerman" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="bExit" cancelButton="true" layoutX="197.0" layoutY="290.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="145.0" text="EXIT GAME" textAlignment="CENTER" textFill="#370ce1">
+         <font>
+            <Font name="Jokerman" size="16.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
