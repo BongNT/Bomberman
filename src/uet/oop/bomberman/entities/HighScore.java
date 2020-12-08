@@ -1,4 +1,4 @@
-package uet.oop.bomberman.highscore;
+package uet.oop.bomberman.entities;
 
 public class HighScore {
     private String name;

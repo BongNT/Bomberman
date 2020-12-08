@@ -17,7 +17,6 @@ public abstract class Entity {
     protected int y;
 
     //protected boolean alive = true;
-
     protected Image img;
 
     // Initialize object, convert from unit to canvas coordinate

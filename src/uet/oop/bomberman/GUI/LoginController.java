@@ -1,5 +1,7 @@
 package uet.oop.bomberman.GUI;
 
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import uet.oop.bomberman.BombermanGame;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,18 +25,23 @@ public class LoginController implements Initializable {
     private Button bStart;
     @FXML
     private Button bBack;
-
     @FXML
     private TextField nameTextField;
+    private boolean launchGame = false;
 
     public void setStartButton() {
+        if(!launchGame) {
 
+            Application.launch(BombermanGame.class);
+
+        }
+        launchGame = true;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         DropShadow shadow = new DropShadow();
-
+        launchGame = false;
         // Applying the DropShadow Effect
         bStart.addEventHandler(MouseEvent.MOUSE_ENTERED,
                 e -> bStart.setEffect(shadow));

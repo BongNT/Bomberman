@@ -7,12 +7,24 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.Character.Bomber;
+import uet.oop.bomberman.entities.Character.Enemy.Balloom;
+import uet.oop.bomberman.entities.Character.Enemy.Doll;
+import uet.oop.bomberman.entities.Character.Enemy.Enemy;
+import uet.oop.bomberman.entities.Character.Enemy.Oneal;
+import uet.oop.bomberman.entities.Enum.STATUS;
+import uet.oop.bomberman.entities.Item.Item;
+import uet.oop.bomberman.entities.Item.ItemBomb;
+import uet.oop.bomberman.entities.Item.ItemFlame;
+import uet.oop.bomberman.entities.Item.ItemSpeed;
+import uet.oop.bomberman.entities.Item.Portal;
+import uet.oop.bomberman.entities.Tiles.Brick;
+import uet.oop.bomberman.entities.Tiles.Grass;
+import uet.oop.bomberman.entities.Tiles.Wall;
 import uet.oop.bomberman.graphics.Sprite;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -21,9 +33,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static uet.oop.bomberman.Sound.Sound.*;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class BombermanGame extends Application {
+    private GraphicsContext gc;
+    private Canvas canvas;
+    private int timeloadImg = FPS * 3;
     public static STATUS status = STATUS.NEXTLEVEL;
     public static final int FPS = 20;
     public static final int timeEachFrame = 1000 / FPS;
@@ -32,13 +48,11 @@ public class BombermanGame extends Application {
     public static List<Enemy> enemies = new ArrayList<>();
     public static List<Entity> map = new ArrayList<>();
     public static List<Item> items = new ArrayList<>();
-    public static Item portal = null;
+    public static Portal portal = null;
     public static Bomber bomberman = null;
-    private GraphicsContext gc;
-    private Canvas canvas;
-    private int timeloadImg = FPS * 3;
     public static int level = 1;
     public static int maxLevel = 3;
+    public static int gameScore = 0;
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
@@ -46,11 +60,10 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) {
         createMap();
-
+        playMedia(gameSound);
         // Create Canvas
         canvas = new Canvas(SCALED_SIZE * WIDTH, SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
-
         // Create root container
         Group root = new Group();
         root.getChildren().add(canvas);
@@ -84,16 +97,16 @@ public class BombermanGame extends Application {
         });
         scene.setOnKeyReleased((KeyEvent key) -> bomberman.notMoving());
 
-
+        stage.setResizable(false);
         // Insert scene into stage
         stage.setScene(scene);
         stage.show();
+
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long t) {
                 long start = System.currentTimeMillis();
-
                 // The update functions
                 loadStatusImg();
                 update();
@@ -111,18 +124,15 @@ public class BombermanGame extends Application {
                     }
                 }
             }
-
         };
         timer.start();
-
-
     }
 
     public void createMap() {
+
         try {
-            FileReader fileReader = null;
             String path = "res\\levels\\Level" + level + ".txt";
-            fileReader = new FileReader(path);
+            FileReader fileReader = new FileReader(path);
             Scanner sc = new Scanner(fileReader);
             sc.nextInt();
             HEIGHT = sc.nextInt();
@@ -174,30 +184,35 @@ public class BombermanGame extends Application {
             for (int i = 0; i < I; i++) {
                 String temp = sc.nextLine();
                 String[] s = temp.split(" ");
-                if (s[0].equals("b")) {
-                    for (int j = 1; j < s.length; j += 2) {
-                        int xUnit = Integer.parseInt(s[j + 1]);
-                        int yUnit = Integer.parseInt(s[j]);
-                        items.add(new ItemBomb(xUnit, yUnit, Sprite.powerup_bombs.getFxImage()));
-                    }
-                } else if (s[0].equals("s")) {
-                    for (int j = 1; j < s.length; j += 2) {
-                        int xUnit = Integer.parseInt(s[j + 1]);
-                        int yUnit = Integer.parseInt(s[j]);
-                        items.add(new ItemSpeed(xUnit, yUnit, Sprite.powerup_speed.getFxImage()));
-                    }
-                } else if (s[0].equals("f")) {
-                    for (int j = 1; j < s.length; j += 2) {
-                        int xUnit = Integer.parseInt(s[j + 1]);
-                        int yUnit = Integer.parseInt(s[j]);
-                        items.add(new ItemFlame(xUnit, yUnit, Sprite.powerup_flames.getFxImage()));
-                    }
-                } else if (s[0].equals("x")) {
-                    for (int j = 1; j < s.length; j += 2) {
-                        int xUnit = Integer.parseInt(s[j + 1]);
-                        int yUnit = Integer.parseInt(s[j]);
-                        portal =  new Portal(xUnit, yUnit, Sprite.portal.getFxImage());
-                    }
+                switch (s[0]) {
+                    case "b":
+                        for (int j = 1; j < s.length; j += 2) {
+                            int xUnit = Integer.parseInt(s[j + 1]);
+                            int yUnit = Integer.parseInt(s[j]);
+                            items.add(new ItemBomb(xUnit, yUnit, Sprite.powerup_bombs.getFxImage()));
+                        }
+                        break;
+                    case "s":
+                        for (int j = 1; j < s.length; j += 2) {
+                            int xUnit = Integer.parseInt(s[j + 1]);
+                            int yUnit = Integer.parseInt(s[j]);
+                            items.add(new ItemSpeed(xUnit, yUnit, Sprite.powerup_speed.getFxImage()));
+                        }
+                        break;
+                    case "f":
+                        for (int j = 1; j < s.length; j += 2) {
+                            int xUnit = Integer.parseInt(s[j + 1]);
+                            int yUnit = Integer.parseInt(s[j]);
+                            items.add(new ItemFlame(xUnit, yUnit, Sprite.powerup_flames.getFxImage()));
+                        }
+                        break;
+                    case "x":
+                        for (int j = 1; j < s.length; j += 2) {
+                            int xUnit = Integer.parseInt(s[j + 1]);
+                            int yUnit = Integer.parseInt(s[j]);
+                            portal = new Portal(xUnit, yUnit, Sprite.portal.getFxImage());
+                        }
+                        break;
                 }
             }
         } catch (IOException e) {
@@ -292,6 +307,8 @@ public class BombermanGame extends Application {
             if(enemy !=null) {
                 enemy.update();
                 if(!enemy.alive) {
+                    gameScore += enemy.getScore();
+                    System.out.println(gameScore);
                     enemies.remove(enemy);
                 }
             }
@@ -302,22 +319,25 @@ public class BombermanGame extends Application {
 
         if(enemies.size() == 0 && portal == null) {
             level ++;
+            gameScore += (500 * level);
             timeloadImg = FPS * 3;
             status = STATUS.NEXTLEVEL;
             if(level > maxLevel) {
                 timeloadImg = FPS * 3;
                 status = STATUS.WIN;
+                gameScore += 2000;
+                System.out.println(gameScore);
                 return;
             }
             bomberman.clearBomb();
             items.clear();
             map.clear();
             createMap();
-
             System.out.println("win");
         } else if (bomberman.life ==0) {
             timeloadImg = FPS * 3;
             status = STATUS.LOSE;
+            System.out.println(gameScore);
             System.out.println("lose");
         }
     }
