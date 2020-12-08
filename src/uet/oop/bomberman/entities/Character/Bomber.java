@@ -14,6 +14,7 @@ import java.util.List;
 
 import static uet.oop.bomberman.BombermanGame.FPS;
 import static uet.oop.bomberman.BombermanGame.enemies;
+import static uet.oop.bomberman.Sound.Sound.*;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class Bomber extends Actor {
@@ -22,7 +23,8 @@ public class Bomber extends Actor {
     private final int maxSpeed = SCALED_SIZE / 8 * 2;
     public static int life = 3;
     //tọa độ để reset nhân vật nếu chết và còn mạng
-    private int initX, initY;
+    private final int initX;
+    private final int initY;
     public static List<Entity> bombs = new ArrayList<>();
 
     public Bomber(int xUnit, int yUnit, Image img) {
@@ -40,24 +42,25 @@ public class Bomber extends Actor {
         updateImage();
         updateBomb();
 
-        if(loadDead) {
+        if (loadDead) {
             loadDestroyImg();
         } else {
             //bomber vs enemies
-            for(int i = 0; i < enemies.size(); i++) {
-                if(checkCollision(this.getRec(), enemies.get(i).getRec())){
+            for (int i = 0; i < enemies.size(); i++) {
+                if (checkCollision(this.getRec(), enemies.get(i).getRec())) {
                     loadDead = true;
+                    playMedia(bomberDie);
                 }
             }
         }
 
         //chết vẫn còn mạng
-        if(!alive) {
+        if (!alive) {
             resetBomber();
         }
     }
 
-    private void resetBomber(){
+    private void resetBomber() {
         life--;
         System.out.println("life : " + life);
         alive = true;
@@ -67,6 +70,7 @@ public class Bomber extends Actor {
         loadDead = false;
         img = Sprite.player_down_1.getFxImage();
     }
+
     @Override
     protected void updateImage() {
 
@@ -97,6 +101,7 @@ public class Bomber extends Actor {
                 return;
             }
         }
+        playMedia(setBombSound);
         bombs.add(new Bomb(xUnit, yUnit, Sprite.bomb.getFxImage()));
 
     }
@@ -131,37 +136,40 @@ public class Bomber extends Actor {
             timeLoadDead = FPS;
         }
         img = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3
-                ,timeLoadDead-- ,FPS).getFxImage();
+                , timeLoadDead--, FPS).getFxImage();
     }
-    public void clearBomb(){
+
+    public void clearBomb() {
         bombs.clear();
     }
-    private void updateBomb(){
+
+    private void updateBomb() {
         for (int i = 0; i < bombs.size(); i++) {
-            Bomb bomb =(Bomb) bombs.get(i);
+            Bomb bomb = (Bomb) bombs.get(i);
             if (bomb.exploded) {
                 bombs.remove(i);
             }
         }
         for (int i = 0; i < bombs.size(); i++) {
             //bomb vs bomb
-            Bomb bomb =(Bomb) bombs.get(i);
+            Bomb bomb = (Bomb) bombs.get(i);
             bomb.update();
-            for(int j = i+1; j < bombs.size(); j++) {
-                Bomb bomb2 =(Bomb) bombs.get(j);
+            for (int j = i + 1; j < bombs.size(); j++) {
+                Bomb bomb2 = (Bomb) bombs.get(j);
                 collisionBomb(bomb, bomb2);
             }
             //bomb vs actor
-            if(bomb.isExploding) {
+            if (bomb.isExploding) {
                 if (!loadDead && bomb.collisionWithActor(this)) {
                     // Actor died
                     System.out.println("bomber : die");
                     loadDead = true;
+                    playMedia(bomberDie);
                 }
                 int n = enemies.size();
-                for(int j = 0; j < n; j++) {
-                    Enemy enemy = (Enemy) enemies.get(j);
-                    if(!enemy.loadDead && bomb.collisionWithActor(enemy)) {
+                for (int j = 0; j < n; j++) {
+                    Enemy enemy = enemies.get(j);
+                    if (!enemy.loadDead && bomb.collisionWithActor(enemy)) {
                         enemy.loadDead = true;
                         System.out.println("enemydie");
                     }

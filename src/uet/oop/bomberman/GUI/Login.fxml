@@ -8,37 +8,44 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uet.oop.bomberman.GUI.LoginController">
-   <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="2.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../../../res/img/menu/login.jpg" />
-         </image>
-      </ImageView>
-      <Text layoutX="2.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WELCOME  TO  BOMBERMAN" textAlignment="CENTER" wrappingWidth="600.0">
-         <font>
-            <Font name="Jokerman" size="35.0" />
-         </font>
-      </Text>
-      <Text layoutX="166.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter your name" textAlignment="CENTER" wrappingWidth="272.125">
-         <font>
-            <Font name="Bodoni MT Black" size="20.0" />
-         </font>
-      </Text>
-      <TextField fx:id="nameTextField" alignment="CENTER" layoutX="183.0" layoutY="185.0" prefHeight="53.0" prefWidth="239.0" promptText="CACLC3 - UET - VNU">
-         <font>
-            <Font name="Bodoni MT Bold Italic" size="20.0" />
-         </font>
-      </TextField>
-      <Button fx:id="bStart" layoutX="129.0" layoutY="320.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="109.0" text="START">
-         <font>
-            <Font name="Jokerman" size="20.0" />
-         </font>
-      </Button>
-      <Button fx:id="bBack" layoutX="368.0" layoutY="320.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="109.0" text="BACK">
-         <font>
-            <Font name="Jokerman" size="20.0" />
-         </font>
-      </Button>
-   </children>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="uet.oop.bomberman.GUI.LoginController">
+    <children>
+        <ImageView fitHeight="400.0" fitWidth="600.0" layoutX="2.0" layoutY="1.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../../../../../res/img/menu/login.jpg"/>
+            </image>
+        </ImageView>
+        <Text layoutX="2.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WELCOME  TO  BOMBERMAN"
+              textAlignment="CENTER" wrappingWidth="600.0">
+            <font>
+                <Font name="Jokerman" size="35.0"/>
+            </font>
+        </Text>
+        <Text layoutX="166.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter your name"
+              textAlignment="CENTER" wrappingWidth="272.125">
+            <font>
+                <Font name="Bodoni MT Black" size="20.0"/>
+            </font>
+        </Text>
+        <TextField fx:id="nameTextField" alignment="CENTER" layoutX="183.0" layoutY="185.0" prefHeight="53.0"
+                   prefWidth="239.0" promptText="CACLC3 - UET - VNU">
+            <font>
+                <Font name="Bodoni MT Bold Italic" size="20.0"/>
+            </font>
+        </TextField>
+        <Button fx:id="bStart" layoutX="129.0" layoutY="320.0" mnemonicParsing="false" prefHeight="53.0"
+                prefWidth="109.0" text="START">
+            <font>
+                <Font name="Jokerman" size="20.0"/>
+            </font>
+        </Button>
+        <Button fx:id="bBack" layoutX="368.0" layoutY="320.0" mnemonicParsing="false" prefHeight="53.0"
+                prefWidth="109.0" text="BACK">
+            <font>
+                <Font name="Jokerman" size="20.0"/>
+            </font>
+        </Button>
+    </children>
 </AnchorPane>

@@ -9,7 +9,9 @@ import uet.oop.bomberman.entities.Interface.Destroyable;
 import uet.oop.bomberman.entities.Interface.Movable;
 import uet.oop.bomberman.entities.Tiles.Grass;
 import uet.oop.bomberman.graphics.Sprite;
+
 import static uet.oop.bomberman.BombermanGame.*;
+
 import java.awt.*;
 import java.util.List;
 
@@ -23,9 +25,10 @@ public abstract class Actor extends Entity implements Movable, Destroyable {
     protected int speed;
     protected DIR dir;
     protected boolean canMove;
-    public boolean alive =true;
+    public boolean alive = true;
     protected boolean loadDead = false;
     protected int timeLoadDead = FPS;
+
     public Actor(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
@@ -55,8 +58,8 @@ public abstract class Actor extends Entity implements Movable, Destroyable {
         dir = DIR.DEFAULT;
     }
 
-    protected void move(){
-        if(!alive || loadDead) return;
+    protected void move() {
+        if (!alive || loadDead) return;
         if (!canMove) return;
         switch (dir) {
             case UP:
@@ -78,11 +81,11 @@ public abstract class Actor extends Entity implements Movable, Destroyable {
 
     @Override
     public void checkMove(List<Entity> bombs) {
-        if(!alive || loadDead) {
+        if (!alive || loadDead) {
             canMove = false;
             return;
         }
-        if(dir == DIR.DEFAULT){
+        if (dir == DIR.DEFAULT) {
             canMove = false;
             return;
         }
@@ -93,8 +96,8 @@ public abstract class Actor extends Entity implements Movable, Destroyable {
         int delta = SCALED_SIZE / 4;
         switch (dir) {
             case UP:
-                actor = new Rectangle(x + 2, y - speed, SCALED_SIZE , SCALED_SIZE);
-                if(pos - WIDTH < 0) {
+                actor = new Rectangle(x + 2, y - speed, SCALED_SIZE, SCALED_SIZE);
+                if (pos - WIDTH < 0) {
                     canMove = false;
                     return;
                 }
@@ -124,7 +127,7 @@ public abstract class Actor extends Entity implements Movable, Destroyable {
 
             case DOWN:
                 actor = new Rectangle(x + 2, y + speed, SCALED_SIZE, SCALED_SIZE);
-                if(pos + WIDTH + 1 >= map.size()) {
+                if (pos + WIDTH + 1 >= map.size()) {
                     canMove = false;
                     return;
                 }
@@ -153,7 +156,7 @@ public abstract class Actor extends Entity implements Movable, Destroyable {
 
             case LEFT:
                 actor = new Rectangle(x - speed, y + 2, SCALED_SIZE, SCALED_SIZE);
-                if(pos - 1 < 0 || pos + WIDTH - 1 >= map.size()) {
+                if (pos - 1 < 0 || pos + WIDTH - 1 >= map.size()) {
                     canMove = false;
                     return;
                 }
@@ -182,7 +185,7 @@ public abstract class Actor extends Entity implements Movable, Destroyable {
 
             case RIGHT:
                 actor = new Rectangle(x + speed, y + 2, SCALED_SIZE, SCALED_SIZE);
-                if(pos - 1 < 0 || pos + WIDTH + 1 >= map.size()) {
+                if (pos - 1 < 0 || pos + WIDTH + 1 >= map.size()) {
                     canMove = false;
                     return;
                 }
@@ -212,11 +215,11 @@ public abstract class Actor extends Entity implements Movable, Destroyable {
         }
 
         // Check collision with bomb
-        actor = new Rectangle(x , y, SCALED_SIZE ,SCALED_SIZE);
+        actor = new Rectangle(x, y, SCALED_SIZE, SCALED_SIZE);
         for (int i = 0; i < bombs.size(); i++) {
-            if(!checkCollision(actor, bombs.get(i).getRec())) {
+            if (!checkCollision(actor, bombs.get(i).getRec())) {
                 Rectangle tempActor = getRecNextStep();
-                if(checkCollision(tempActor, bombs.get(i).getRec())) {
+                if (checkCollision(tempActor, bombs.get(i).getRec())) {
                     canMove = false;
                     return;
                 }
@@ -228,19 +231,19 @@ public abstract class Actor extends Entity implements Movable, Destroyable {
 
     protected Image animateImage(Sprite normal, Sprite x1, Sprite x2) {
         presentImg %= timeAnimate;
-        return Sprite.movingSprite(normal, x1, x2, (presentImg++) ,timeAnimate).getFxImage();
+        return Sprite.movingSprite(normal, x1, x2, (presentImg++), timeAnimate).getFxImage();
     }
 
-    public Rectangle getRecNextStep(){
-        switch (dir){
+    public Rectangle getRecNextStep() {
+        switch (dir) {
             case UP:
-                return new Rectangle(x, y-speed, SCALED_SIZE,SCALED_SIZE);
+                return new Rectangle(x, y - speed, SCALED_SIZE, SCALED_SIZE);
             case DOWN:
-                return new Rectangle(x, y+speed, SCALED_SIZE,SCALED_SIZE);
+                return new Rectangle(x, y + speed, SCALED_SIZE, SCALED_SIZE);
             case LEFT:
-                return new Rectangle(x-speed, y, SCALED_SIZE,SCALED_SIZE);
+                return new Rectangle(x - speed, y, SCALED_SIZE, SCALED_SIZE);
             case RIGHT:
-                return new Rectangle(x + speed, y, SCALED_SIZE,SCALED_SIZE);
+                return new Rectangle(x + speed, y, SCALED_SIZE, SCALED_SIZE);
         }
         return null;
 

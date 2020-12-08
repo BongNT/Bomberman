@@ -15,6 +15,8 @@ import uet.oop.bomberman.graphics.Sprite;
 import java.awt.*;
 
 import static uet.oop.bomberman.BombermanGame.*;
+import static uet.oop.bomberman.Sound.Sound.bombExplodeSound;
+import static uet.oop.bomberman.Sound.Sound.playMedia;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
 public class Bomb extends Entity implements Destroyable {
@@ -65,6 +67,7 @@ public class Bomb extends Entity implements Destroyable {
         //trước khi nổ
         if (timeExist == 0) {
             isExploding = true;
+            playMedia(bombExplodeSound);
             //timeExsist = FPS * 3;
         }
         //bomb nổ
@@ -94,7 +97,7 @@ public class Bomb extends Entity implements Destroyable {
         }
     }
 
-    private int setLengthFlame(DIR dir){
+    private int setLengthFlame(DIR dir) {
         int pos = getPosition();
         int length = 0;
         switch (dir) {
@@ -141,7 +144,7 @@ public class Bomb extends Entity implements Destroyable {
         }
         for (int i = 1; i <= upLength; i++) {
             int j = pos - i * WIDTH;
-            if(collisionWithMap(j)){
+            if (collisionWithMap(j)) {
                 upLength = i;
             }
         }
@@ -150,7 +153,7 @@ public class Bomb extends Entity implements Destroyable {
         }
         for (int i = 1; i <= downLength; i++) {
             int j = pos + i * WIDTH;
-            if(collisionWithMap(j)){
+            if (collisionWithMap(j)) {
                 downLength = i;
             }
         }
@@ -159,7 +162,7 @@ public class Bomb extends Entity implements Destroyable {
         }
         for (int i = 1; i <= leftLength; i++) {
             int j = pos - i;
-            if(collisionWithMap(j)){
+            if (collisionWithMap(j)) {
                 leftLength = i;
             }
         }
@@ -168,7 +171,7 @@ public class Bomb extends Entity implements Destroyable {
         }
         for (int i = 1; i <= rightLength; i++) {
             int j = pos + i;
-            if(collisionWithMap(j)){
+            if (collisionWithMap(j)) {
                 rightLength = i;
             }
         }
@@ -176,8 +179,8 @@ public class Bomb extends Entity implements Destroyable {
 
 
     public boolean collisionWithActor(Actor actor) {
-        if(actor instanceof Bomber) {
-            Rectangle a = new Rectangle(actor.getX() + 5, actor.getY()+ 5,SCALED_SIZE - 15, SCALED_SIZE - 15);
+        if (actor instanceof Bomber) {
+            Rectangle a = new Rectangle(actor.getX() + 5, actor.getY() + 5, SCALED_SIZE - 15, SCALED_SIZE - 15);
             //Rectangle a = actor.getRec();
             return checkCollision(a, getVerticalRec()) || checkCollision(a, getHorizontalRec());
         }
@@ -187,10 +190,11 @@ public class Bomb extends Entity implements Destroyable {
 
     /**
      * check collision between flame and map.
+     *
      * @param pos position of entity in map
      * @return return true if flame impact wall, brick.
      */
-    private boolean collisionWithMap(int pos){
+    private boolean collisionWithMap(int pos) {
         if (pos < 0 || pos > map.size()) {
             return true;
         }
@@ -202,7 +206,7 @@ public class Bomb extends Entity implements Destroyable {
             ((Brick) temp).destroy();
             return true;
         }
-        return  false;
+        return false;
     }
 
     private void setBombExplode(int timeExplode) {
@@ -216,31 +220,29 @@ public class Bomb extends Entity implements Destroyable {
         flameDown.setTimeExplode(timeExplode);
     }
 
-    public int getTimeExplode() {
-        return timeExplode;
-    }
-
     private int getVerticalLength() {
         return downLength + upLength + 1;
     }
+
     private int getHorizontalLength() {
         return leftLength + rightLength + 1;
     }
+
     private java.awt.Rectangle getHorizontalRec() {
-        return new java.awt.Rectangle(x - leftLength * SCALED_SIZE,y,getHorizontalLength() * SCALED_SIZE, SCALED_SIZE);
+        return new java.awt.Rectangle(x - leftLength * SCALED_SIZE, y, getHorizontalLength() * SCALED_SIZE, SCALED_SIZE);
     }
+
     private java.awt.Rectangle getVerticalRec() {
-        return new java.awt.Rectangle(x , y - upLength * SCALED_SIZE, SCALED_SIZE, getVerticalLength() * SCALED_SIZE);
+        return new java.awt.Rectangle(x, y - upLength * SCALED_SIZE, SCALED_SIZE, getVerticalLength() * SCALED_SIZE);
     }
 
 
     public void collisionWithBomb(Bomb bomb) {
-        if(checkCollision(getRec(), bomb.getHorizontalRec()) ||
+        if (checkCollision(getRec(), bomb.getHorizontalRec()) ||
                 checkCollision(getRec(), bomb.getVerticalRec()) ||
                 checkCollision(getVerticalRec(), bomb.getRec()) ||
-                checkCollision(getHorizontalRec(), bomb.getRec()))
-        {
-            if((this.isExploding &&!bomb.isExploding)) {
+                checkCollision(getHorizontalRec(), bomb.getRec())) {
+            if ((this.isExploding && !bomb.isExploding)) {
                 //int min = Integer.min(bomb.getTimeExplode(),timeExplode);
                 bomb.setBombExplode(timeExplode);
             }

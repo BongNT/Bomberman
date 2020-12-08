@@ -21,7 +21,7 @@ public abstract class Item extends Entity {
 
     @Override
     public Rectangle getRec() {
-        return new Rectangle(x + SCALED_SIZE / 4,y + SCALED_SIZE / 4,SCALED_SIZE / 2,SCALED_SIZE / 2);
+        return new Rectangle(x + SCALED_SIZE / 4, y + SCALED_SIZE / 4, SCALED_SIZE / 2, SCALED_SIZE / 2);
     }
 
     @Override

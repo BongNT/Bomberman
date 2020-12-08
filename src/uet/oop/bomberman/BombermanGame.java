@@ -25,6 +25,7 @@ import uet.oop.bomberman.entities.Tiles.Brick;
 import uet.oop.bomberman.entities.Tiles.Grass;
 import uet.oop.bomberman.entities.Tiles.Wall;
 import uet.oop.bomberman.graphics.Sprite;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -54,6 +55,7 @@ public class BombermanGame extends Application {
     public static int maxLevel = 3;
     public static int gameScore = 0;
     public static HighScore highScore = new HighScore();
+
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
@@ -61,8 +63,7 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) {
         createMap();
-        playMedia(BomberDie);
-
+        playLoopMedia(gameSound);
         // Create Canvas
         canvas = new Canvas(SCALED_SIZE * WIDTH, SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
@@ -112,9 +113,10 @@ public class BombermanGame extends Application {
                 long start = System.currentTimeMillis();
                 // The update functions
                 loadStatusImg();
+                //playLoopMedia(eatItemSound);
                 update();
                 render();
-                if((status == STATUS.WIN ||status == STATUS.LOSE) && timeloadImg ==0) {
+                if ((status == STATUS.WIN || status == STATUS.LOSE) && timeloadImg == 0) {
                     System.out.println("end game");
                     System.exit(0);
                 }
@@ -224,24 +226,24 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
-        if(status == STATUS.PLAYING) {
+        if (status == STATUS.PLAYING) {
             bomberman.update();
             updateEnemy();
             items.forEach(Entity::update);
             map.forEach(Entity::update);
             updateItem();
-            if(portal != null) portal.update();
+            if (portal != null) portal.update();
             updateMap();
             updateStatus();
         }
     }
 
     public void render() {
-        if(status == STATUS.PLAYING) {
+        if (status == STATUS.PLAYING) {
             gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
             map.forEach(g -> g.render(gc));
             items.forEach(g -> g.render(gc));
-            if(portal != null) portal.render(gc);
+            if (portal != null) portal.render(gc);
             enemies.forEach(g -> g.render(gc));
             bomberman.render(gc);
         }
@@ -249,35 +251,33 @@ public class BombermanGame extends Application {
 
     private void loadStatusImg() {
         Image image = null;
-        if(status == STATUS.WIN) {
-            if(timeloadImg >= 0) timeloadImg--;
+        if (status == STATUS.WIN) {
+            if (timeloadImg >= 0) timeloadImg--;
             try {
                 image = new Image(new FileInputStream("res/img/status/win.png"));
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            if(timeloadImg >= 0)gc.drawImage(image,0,0);
-        }
-        else if(status == STATUS.LOSE) {
-            if(timeloadImg >= 0) timeloadImg--;
+            if (timeloadImg >= 0) gc.drawImage(image, 0, 0);
+        } else if (status == STATUS.LOSE) {
+            if (timeloadImg >= 0) timeloadImg--;
             try {
                 image = new Image(new FileInputStream("res/img/status/lose.png"));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            if(timeloadImg > 0)gc.drawImage(image,0,0);
-        }
-        else if (status == STATUS.NEXTLEVEL) {
-            if(timeloadImg >= 0) timeloadImg--;
+            if (timeloadImg > 0) gc.drawImage(image, 0, 0);
+        } else if (status == STATUS.NEXTLEVEL) {
+            if (timeloadImg >= 0) timeloadImg--;
             String path = "res/img/level/lv" + level + ".png";
             try {
                 image = new Image(new FileInputStream(path));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            if(timeloadImg > 0)gc.drawImage(image,0,0);
-            if(timeloadImg == 0) status = STATUS.PLAYING;
+            if (timeloadImg > 0) gc.drawImage(image, 0, 0);
+            if (timeloadImg == 0) status = STATUS.PLAYING;
         }
     }
 
@@ -307,9 +307,9 @@ public class BombermanGame extends Application {
     private void updateEnemy() {
         for (int i = 0; i < enemies.size(); i++) {
             Enemy enemy = enemies.get(i);
-            if(enemy !=null) {
+            if (enemy != null) {
                 enemy.update();
-                if(!enemy.alive) {
+                if (!enemy.alive) {
                     gameScore += enemy.getScore();
                     System.out.println(gameScore);
                     enemies.remove(enemy);
@@ -320,24 +320,26 @@ public class BombermanGame extends Application {
 
     private void updateStatus() {
 
-        if(enemies.size() == 0 && portal == null) {
-            level ++;
+        if (enemies.size() == 0 && portal == null) {
+            level++;
             gameScore += (500 * level);
             timeloadImg = FPS * 3;
             status = STATUS.NEXTLEVEL;
-            if(level > maxLevel) {
+            if (level > maxLevel) {
                 timeloadImg = FPS * 3;
                 status = STATUS.WIN;
+                playMedia(winSound);
                 gameScore += 2000;
                 System.out.println(gameScore);
                 return;
             }
+            playMedia(levelUpSound);
             bomberman.clearBomb();
             items.clear();
             map.clear();
             createMap();
             System.out.println("win");
-        } else if (bomberman.life ==0) {
+        } else if (Bomber.life == 0) {
             timeloadImg = FPS * 3;
             status = STATUS.LOSE;
             highScore.setScore(gameScore);

@@ -18,7 +18,7 @@ public class Balloom extends Enemy {
 
     @Override
     public void changeDir() {
-        if(!canMove) {
+        if (!canMove) {
             randomDir();
         }
     }
@@ -41,7 +41,7 @@ public class Balloom extends Enemy {
 
     @Override
     public void loadDestroyImg() {
-        if(timeLoadDead == 0) {
+        if (timeLoadDead == 0) {
             alive = false;
         }
         img = Sprite.balloom_dead.getFxImage();

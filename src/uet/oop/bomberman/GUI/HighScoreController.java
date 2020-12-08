@@ -17,7 +17,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class HighScoreController implements Initializable {
-    @FXML private Button bBack;
+    @FXML
+    private Button bBack;
 
 
     @Override

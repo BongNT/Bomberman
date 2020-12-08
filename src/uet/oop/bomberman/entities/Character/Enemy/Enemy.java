@@ -19,7 +19,7 @@ public abstract class Enemy extends Actor {
 
     protected void checkCollisionEnemies() {
         for (int i = 0; i < enemies.size(); i++) {
-            Enemy enemy = (Enemy) enemies.get(i);
+            Enemy enemy = enemies.get(i);
             if (enemy != this && enemy.canMove) {
                 if (checkCollision(this.getRecNextStep(), enemy.getRecNextStep())) {
                     this.canMove = false;
@@ -32,7 +32,7 @@ public abstract class Enemy extends Actor {
     }
 
     protected void reverseDir() {
-        if(!alive || loadDead) return;
+        if (!alive || loadDead) return;
         switch (dir) {
             case UP:
                 dir = DIR.DOWN;
@@ -50,7 +50,7 @@ public abstract class Enemy extends Actor {
     }
 
     protected void randomDir() {
-        if(!alive || loadDead) return;
+        if (!alive || loadDead) return;
         dir = DIR.random();
         while (dir == DIR.DEFAULT) {
             dir = DIR.random();
@@ -59,7 +59,7 @@ public abstract class Enemy extends Actor {
 
     @Override
     public void update() {
-        if(loadDead) {
+        if (loadDead) {
             loadDestroyImg();
             return;
         }

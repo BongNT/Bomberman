@@ -6,5 +6,6 @@ import static uet.oop.bomberman.BombermanGame.FPS;
 
 public interface Destroyable {
     int timeDestroy = FPS;
+
     void loadDestroyImg();
 }

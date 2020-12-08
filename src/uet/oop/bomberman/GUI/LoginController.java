@@ -30,7 +30,7 @@ public class LoginController implements Initializable {
     private boolean launchGame = false;
 
     public void setStartButton() {
-        if(!launchGame) {
+        if (!launchGame) {
 
             Application.launch(BombermanGame.class);
 
