@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static uet.oop.bomberman.GUI.Main.menuScene;
+import static uet.oop.bomberman.Sound.Sound.menuSound;
 
 public class LoginController extends MenuController implements Initializable {
     @FXML
@@ -28,6 +29,7 @@ public class LoginController extends MenuController implements Initializable {
         Scene scene = game.getScene(stage);
         stage.setScene(scene);
         stage.show();
+        menuSound.stop();
     }
 
     @Override

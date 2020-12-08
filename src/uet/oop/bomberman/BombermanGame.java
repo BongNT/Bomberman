@@ -52,7 +52,7 @@ public class BombermanGame {
     public static int level ;
     public static int maxLevel ;
     public static int gameScore ;
-    //public static HighScore highScore = new HighScore();
+
 
 
     public Scene getScene (Stage stage) {
@@ -66,6 +66,7 @@ public class BombermanGame {
         maxLevel = 3;
         gameScore = 0;
         portal = null;
+        if(bomberman != null)bomberman.clearBomb();
         bomberman = null;
         status = STATUS.NEXTLEVEL;
         timeLoadImg = FPS * 3;
@@ -75,41 +76,6 @@ public class BombermanGame {
         Bomber.resetLife();
         createMap();
         playLoopMedia(gameSound);
-
-        // Create Canvas
-        canvas = new Canvas(SCALED_SIZE * WIDTH, SCALED_SIZE * HEIGHT);
-        gc = canvas.getGraphicsContext2D();
-        // Create root container
-        Group root = new Group();
-        root.getChildren().add(canvas);
-        // Create scene
-        Scene scene = new Scene(root);
-        // Create control
-        scene.setOnKeyPressed(key -> {
-            switch (key.getCode()) {
-                case UP:
-                    bomberman.moveUp();
-                    break;
-                case DOWN:
-                    bomberman.moveDown();
-                    break;
-                case LEFT:
-                    bomberman.moveLeft();
-                    break;
-                case RIGHT:
-                    bomberman.moveRight();
-                    break;
-                case SPACE:
-                    bomberman.setBomb();
-                    break;
-                case Z:
-                    enemies.clear();
-                    playMedia(BomberDie);
-                    break;
-            }
-        });
-        scene.setOnKeyReleased((KeyEvent key) -> bomberman.notMoving());
-        stage.setResizable(false);
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long t) {
@@ -141,6 +107,50 @@ public class BombermanGame {
                 }
             }
         };
+        // Create Canvas
+        canvas = new Canvas(SCALED_SIZE * WIDTH, SCALED_SIZE * HEIGHT);
+        gc = canvas.getGraphicsContext2D();
+        // Create root container
+        Group root = new Group();
+        root.getChildren().add(canvas);
+        // Create scene
+        Scene scene = new Scene(root);
+        // Create control
+        scene.setOnKeyPressed(key -> {
+            switch (key.getCode()) {
+                case UP:
+                    bomberman.moveUp();
+                    break;
+                case DOWN:
+                    bomberman.moveDown();
+                    break;
+                case LEFT:
+                    bomberman.moveLeft();
+                    break;
+                case RIGHT:
+                    bomberman.moveRight();
+                    break;
+                case SPACE:
+                    bomberman.setBomb();
+                    break;
+                case Z:
+                    enemies.clear();
+                    playMedia(BomberDie);
+                    break;
+                case ESCAPE:
+                    timer.stop();
+                    gameSound.stop();
+                    try {
+                        Main.loadMenuStage(stage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        });
+        scene.setOnKeyReleased((KeyEvent key) -> bomberman.notMoving());
+        stage.setResizable(false);
+
         timer.start();
         return scene;
     }
@@ -353,7 +363,6 @@ public class BombermanGame {
         } else if (Bomber.life == 0) {
             timeLoadImg = FPS * 3;
             status = STATUS.LOSE;
-            //highScore.setScore(gameScore);
             System.out.println(gameScore);
             System.out.println("YOU LOSE");
             playMedia(loseSound);

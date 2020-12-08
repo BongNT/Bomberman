@@ -12,6 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import static uet.oop.bomberman.Sound.Sound.menuSound;
+import static uet.oop.bomberman.Sound.Sound.playLoopMedia;
+
 public class Main extends Application {
     public static Scene menuScene = createScene("src\\uet\\oop\\bomberman\\GUI\\View.fxml");
     public static Scene highScoreScene = createScene("src\\uet\\oop\\bomberman\\GUI\\HighScore.fxml");
@@ -50,6 +53,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         //stage = primaryStage;
+        playLoopMedia(menuSound);
         primaryStage.setOnCloseRequest(e -> {
             Platform.exit();
             System.exit(0);
