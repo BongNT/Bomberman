@@ -2,12 +2,9 @@ package uet.oop.bomberman.Sound;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
-
 import java.io.File;
 
 public class Sound {
-    private final boolean isPlaying = false;
     public final static Media media1 = new Media(new File("res/sound/menu.mp3").toURI().toString());
     public final static Media media2 = new Media(new File("res/sound/game.mp3").toURI().toString());
     public final static Media media3 = new Media(new File("res/sound/set_bomb.wav").toURI().toString());

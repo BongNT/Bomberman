@@ -37,7 +37,7 @@ import java.util.Scanner;
 import static uet.oop.bomberman.Sound.Sound.*;
 import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 
-public class BombermanGame extends Application {
+public class BombermanGame {
     private GraphicsContext gc;
     private Canvas canvas;
     private int timeloadImg = FPS * 3;
@@ -56,12 +56,12 @@ public class BombermanGame extends Application {
     public static int gameScore = 0;
     public static HighScore highScore = new HighScore();
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Application.launch(BombermanGame.class);
-    }
+    }*/
 
-    @Override
-    public void start(Stage stage) {
+
+    public Scene getScene (Stage stage) {
         createMap();
         playLoopMedia(gameSound);
         // Create Canvas
@@ -102,9 +102,9 @@ public class BombermanGame extends Application {
         });
         scene.setOnKeyReleased((KeyEvent key) -> bomberman.notMoving());
         stage.setResizable(false);
-        // Insert scene into stage
+/*        // Insert scene into stage
         stage.setScene(scene);
-        stage.show();
+        stage.show();*/
 
 
         AnimationTimer timer = new AnimationTimer() {
@@ -131,6 +131,7 @@ public class BombermanGame extends Application {
             }
         };
         timer.start();
+        return scene;
     }
 
     public void createMap() {

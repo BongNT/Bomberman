@@ -27,21 +27,19 @@ public class LoginController implements Initializable {
     private Button bBack;
     @FXML
     private TextField nameTextField;
-    private boolean launchGame = false;
 
     public void setStartButton() {
-        if (!launchGame) {
-
-            Application.launch(BombermanGame.class);
-
-        }
-        launchGame = true;
+        Stage stage = new Stage();
+        BombermanGame game = new BombermanGame();
+        Scene scene = game.getScene(stage);
+        stage.setScene(scene);
+        stage.show();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         DropShadow shadow = new DropShadow();
-        launchGame = false;
+
         // Applying the DropShadow Effect
         bStart.addEventHandler(MouseEvent.MOUSE_ENTERED,
                 e -> bStart.setEffect(shadow));
