@@ -38,21 +38,21 @@ import static uet.oop.bomberman.graphics.Sprite.SCALED_SIZE;
 public class BombermanGame {
     private GraphicsContext gc;
     private Canvas canvas;
-    private int timeLoadImg = FPS * 3;
+    private int timeLoadImg;
     public static STATUS status = STATUS.NEXTLEVEL;
     public static final int FPS = 20;
     public static final int timeEachFrame = 1000 / FPS;
     public static int WIDTH;
     public static int HEIGHT;
-    public static List<Enemy> enemies = new ArrayList<>();
-    public static List<Entity> map = new ArrayList<>();
-    public static List<Item> items = new ArrayList<>();
-    public static Portal portal = null;
-    public static Bomber bomberman = null;
-    public static int level = 1;
-    public static int maxLevel = 3;
-    public static int gameScore = 0;
-    public static HighScore highScore = new HighScore();
+    public static List<Enemy> enemies ;
+    public static List<Entity> map ;
+    public static List<Item> items ;
+    public static Portal portal ;
+    public static Bomber bomberman ;
+    public static int level ;
+    public static int maxLevel ;
+    public static int gameScore ;
+    //public static HighScore highScore = new HighScore();
 
 
     public Scene getScene (Stage stage) {
@@ -61,21 +61,29 @@ public class BombermanGame {
             Platform.exit();
             System.exit(0);
         });
-
+        System.out.println("reset");
+        level = 1;
+        maxLevel = 3;
+        gameScore = 0;
+        portal = null;
+        bomberman = null;
+        status = STATUS.NEXTLEVEL;
+        timeLoadImg = FPS * 3;
+        enemies = new ArrayList<>();
+        map = new ArrayList<>();
+        items = new ArrayList<>();
+        Bomber.resetLife();
         createMap();
         playLoopMedia(gameSound);
 
         // Create Canvas
         canvas = new Canvas(SCALED_SIZE * WIDTH, SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
-
         // Create root container
         Group root = new Group();
         root.getChildren().add(canvas);
-
         // Create scene
         Scene scene = new Scene(root);
-
         // Create control
         scene.setOnKeyPressed(key -> {
             switch (key.getCode()) {
@@ -100,25 +108,23 @@ public class BombermanGame {
                     break;
             }
         });
-
         scene.setOnKeyReleased((KeyEvent key) -> bomberman.notMoving());
         stage.setResizable(false);
-
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long t) {
                 long start = System.currentTimeMillis();
-
                 // The update functions
                 loadStatusImg();
-
-                playLoopMedia(eatItemSound);
                 update();
                 render();
-
+                System.out.println(1);
                 if ((status == STATUS.WIN || status == STATUS.LOSE) && timeLoadImg == 0) {
                     System.out.println("end game");
                     try {
+                        gameSound.stop();
+                        //stage.setScene(null);
+                        stop();
                         Main.loadMenuStage(stage);
                     } catch (IOException ioException) {
                         ioException.getMessage();
@@ -326,6 +332,7 @@ public class BombermanGame {
     private void updateStatus() {
         if (enemies.size() == 0 && portal == null) {
             level++;
+            //System.out.println(level);
             gameScore += (500 * level);
             timeLoadImg = FPS * 3;
             status = STATUS.NEXTLEVEL;
@@ -346,7 +353,7 @@ public class BombermanGame {
         } else if (Bomber.life == 0) {
             timeLoadImg = FPS * 3;
             status = STATUS.LOSE;
-            highScore.setScore(gameScore);
+            //highScore.setScore(gameScore);
             System.out.println(gameScore);
             System.out.println("YOU LOSE");
             playMedia(loseSound);

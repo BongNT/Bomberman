@@ -16,6 +16,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static uet.oop.bomberman.GUI.Main.menuScene;
+
 public class HighScoreController implements Initializable {
     @FXML
     private Button bBack;
@@ -33,22 +35,9 @@ public class HighScoreController implements Initializable {
 
         bBack.setOnAction(event -> {
             Stage stage = (Stage) bBack.getScene().getWindow();
-            FXMLLoader loader = null;
-            try {
-                loader = new FXMLLoader(
-                        new File("src\\uet\\oop\\bomberman\\GUI\\View.fxml").toURI().toURL());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            Parent root = null;
-            try {
-                root = loader.load();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-            Scene scene = new Scene(root);
+
             stage.setTitle("MAIN MENU");
-            stage.setScene(scene);
+            stage.setScene(menuScene);
         });
     }
 }

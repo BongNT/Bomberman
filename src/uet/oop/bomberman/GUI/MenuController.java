@@ -25,6 +25,9 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static uet.oop.bomberman.GUI.Main.highScoreScene;
+import static uet.oop.bomberman.GUI.Main.loginScene;
+
 public class MenuController implements Initializable {
     @FXML
     private Button bPlay;
@@ -37,22 +40,16 @@ public class MenuController implements Initializable {
 
     public void setHighScoreButton() throws IOException {
         Stage stage = (Stage) bHighScore.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(
-                new File("src\\uet\\oop\\bomberman\\GUI\\HighScore.fxml").toURI().toURL());
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
+
         stage.setTitle("HIGH SCORE");
-        stage.setScene(scene);
+        stage.setScene(highScoreScene);
     }
 
     public void setPlayButton() throws IOException {
         Stage stage = (Stage) bPlay.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(
-                new File("src\\uet\\oop\\bomberman\\GUI\\Login.fxml").toURI().toURL());
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
+
         stage.setTitle("LOGIN");
-        stage.setScene(scene);
+        stage.setScene(loginScene);
     }
 
     public void setInstructionButton() {

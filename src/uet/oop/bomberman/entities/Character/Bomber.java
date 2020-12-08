@@ -177,4 +177,7 @@ public class Bomber extends Actor {
             }
         }
     }
+    public static void resetLife() {
+        life = 3;
+    }
 }
