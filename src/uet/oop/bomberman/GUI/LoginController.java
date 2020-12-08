@@ -1,7 +1,5 @@
 package uet.oop.bomberman.GUI;
 
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,7 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginController implements Initializable {
+public class LoginController extends MenuController implements Initializable {
     @FXML
     private Button bStart;
     @FXML
@@ -29,7 +27,7 @@ public class LoginController implements Initializable {
     private TextField nameTextField;
 
     public void setStartButton() {
-        Stage stage = new Stage();
+        Stage stage = (Stage) bStart.getScene().getWindow();
         BombermanGame game = new BombermanGame();
         Scene scene = game.getScene(stage);
         stage.setScene(scene);
