@@ -53,6 +53,7 @@ public class BombermanGame extends Application {
     public static int level = 1;
     public static int maxLevel = 3;
     public static int gameScore = 0;
+    public static HighScore highScore = new HighScore();
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
@@ -60,7 +61,8 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) {
         createMap();
-        playMedia(gameSound);
+        playMedia(BomberDie);
+
         // Create Canvas
         canvas = new Canvas(SCALED_SIZE * WIDTH, SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
@@ -92,11 +94,12 @@ public class BombermanGame extends Application {
                     break;
                 case Z:
                     enemies.clear();
+                    playMedia(BomberDie);
                     break;
+
             }
         });
         scene.setOnKeyReleased((KeyEvent key) -> bomberman.notMoving());
-
         stage.setResizable(false);
         // Insert scene into stage
         stage.setScene(scene);
@@ -337,8 +340,10 @@ public class BombermanGame extends Application {
         } else if (bomberman.life ==0) {
             timeloadImg = FPS * 3;
             status = STATUS.LOSE;
+            highScore.setScore(gameScore);
             System.out.println(gameScore);
             System.out.println("lose");
+            playMedia(loseSound);
         }
     }
 }
