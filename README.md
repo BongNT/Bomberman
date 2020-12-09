@@ -2,12 +2,9 @@
 
 Trong bài tập lớn này, nhiệm vụ của bạn là viết một phiên bản Java mô phỏng lại trò chơi [Bomberman](https://www.youtube.com/watch?v=mKIOVwqgSXM) kinh điển của NES.
 
-<img src="res/demo.png" alt="drawing" width="400"/>
-
-Bạn có thể sử dụng mã nguồn tại repository này để phát triển hoặc tự phát triển từ đầu.
-
 
 ## Mô tả starter project
+- chạy game ở src\uet\oop\bomberman\Main.java .
 - di chuyển nhân vật bằng phím mũi tên, đặt bomb bằng phím space.
 - người chơi có tổng cộng 3 mạng, nếu bị bomb nổ hoặc chạm vào enemy thì sẽ mất 1 mạng.
 - thắng nếu tiêu diệt được tất cả enemy mỗi level.
